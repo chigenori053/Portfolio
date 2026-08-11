@@ -164,7 +164,7 @@ Roles:      Architect (human) / ResearchAgent / CodingAgent / ValidationAgent
 | **MRA** | In development. The Molecule / Evidence / Provenance data model and the Truth Boundary are established as specification |
 | **VisionWorldModel** | Validated through Phase 3C-1; adaptive structural reasoning underway |
 | **LanguageModel** | Phase 0 (foundation pinning, specification) complete; Holographic Core implementation next |
-| **Design_BrainModel** | **v1 is an incomplete product** — abandoned after reasoning explosion caused system freezes, the memory core failed to learn as expected, and HolographicMemory proved too large to be practical. These three limits directly motivated **ReasonScript**. **v2 redesign planned on ReasonScript + MRA Base** |
+| **Design_BrainModel** | **v1 is an incomplete product** — (1) reasoning explosion caused system freezes; it is currently only forcibly suppressed, with no basis to claim stable operation, (2) the memory core did not learn as expected, (3) HolographicMemory proved too large to be practical. These three limits directly motivated **ReasonScript**. **v2 redesign planned on ReasonScript + MRA Base** |
 | **COHERENT** | In development toward Phase 2 (Coding Agent Integration) |
 | **mathlang** | Archived 2025-11; its ideas carried forward into later projects |
 

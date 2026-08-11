@@ -174,7 +174,7 @@ Phase 0 → 1 → 2 → 3A → 3B-1 → 3B-2 → 3B-3 → 3C-1 と細かく刻�
 | **MRA** | 開発中。Molecule / Evidence / Provenance のデータモデルと Truth Boundary を仕様として確立した段階 |
 | **VisionWorldModel** | Phase 3C-1 まで検証完了。適応的構造推論に着手 |
 | **LanguageModel** | Phase 0（基盤固定・仕様策定）完了。Holographic Core 実装がこれから |
-| **Design_BrainModel** | **v1 は未完成プロダクト** — 推論爆発によるシステムフリーズ、記憶機構の学習能力不足、HolographicMemory の容量が実用に耐えず断念。この3つの限界が **ReasonScript 開発の直接の動機**。**ReasonScript + MRA Base による v2 再設計を予定** |
+| **Design_BrainModel** | **v1 は未完成プロダクト** — ①推論爆発によるシステムフリーズ（現状は強引な抑制のみで、安定稼働の根拠がない）②記憶機構が期待した学習能力を発揮しなかった ③HolographicMemory の容量が実用に耐えない。この3つが **ReasonScript 開発の直接の動機**。**ReasonScript + MRA Base による v2 再設計を予定** |
 | **COHERENT** | Phase 2（Coding Agent Integration）に向けて開発中 |
 | **mathlang** | 2025-11 で更新停止（発想は後続に継承済み） |
 

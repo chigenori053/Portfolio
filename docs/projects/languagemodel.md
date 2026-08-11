@@ -11,8 +11,19 @@
 | **基盤** | **ReasonScript v0.5.4.5**（commit `7f29c1c31a06ad70abc4024bc4655873c43797b3` に固定） |
 | **状態** | **Phase 0 完了**（基盤固定・仕様策定）。実装はこれから |
 | **規模** | 実装 約450行 + 仕様書 |
+| **ライセンス** | 全権利留保（開発中の MRA を構成するため） |
 
 ---
+
+## 位置づけ — MRA の言語ドメインモデル
+
+**MRA（Molecular Reasoning Architecture）の言語ドメインモデル**です。
+[VisionWorldModel](visionworldmodel.md)（視覚ドメイン）· Design_BrainModel v2（ソフトウェア設計ドメイン）と
+並んで、共通基盤の上に構築されます。
+
+本プロジェクトの仕様書は、MRA 全体で共有される中核概念——
+**Molecule · Evidence · Provenance · Truth Boundary**——を最初に定式化した文書でもあります。
+言語ドメインの仕様であると同時に、アーキテクチャ全体の基礎資料としての役割を持っています。
 
 ## このプロジェクトの読み方
 

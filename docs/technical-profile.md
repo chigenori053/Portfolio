@@ -19,9 +19,14 @@
 決定論的な言語処理系と、記憶と真実を分離した推論アーキテクチャを設計・実装しています。
 
 10ヶ月間で6つのプロジェクトを構築し、その中核として**プログラミング言語 ReasonScript を
-ゼロから開発**（実装約135,000行、テスト1,085件、仕様書600本）。
+ゼロから開発**（実装約135,000行、テスト1,085件、仕様書600本、Apache-2.0）。
 Rust は2プロジェクト合計で約97,000行、うち Design_BrainModel は60を超える crate による
 ワークスペースとして設計・実装しています。
+
+現在は、その上に **MRA（Molecular Reasoning Architecture）** ——知識を型付き Atom と Bond からなる
+Molecule として表現する推論アーキテクチャ——を構築中です。
+**視覚・言語・ソフトウェア設計という3つのドメインに、同一の表現形式と推論契約で展開する**方針で、
+それぞれ VisionWorldModel · LanguageModel · Design_BrainModel v2 として進めています。
 
 特徴は、**再現性・検証可能性をライブラリではなく仕様レベルで保証する**という一貫した方針です。
 
@@ -87,6 +92,7 @@ Rust は2プロジェクト合計で約97,000行、うち Design_BrainModel は6
 | ファジィ判定 | `fuzzy/` モジュール、Fuzzy Judge / DecisionEngine |
 | エージェント設計 | Action-Based Reasoning、Planner → Executor → Validation → Repair ループ |
 | 世界モデル | VisionWorldModel、Design_BrainModel `world_model` crate |
+| 推論アーキテクチャ設計 | **MRA** — Molecule / Evidence / Provenance によるドメイン横断の知識表現と、視覚・言語・ソフトウェア設計への展開設計 |
 
 ### 品質保証・開発プロセス
 
@@ -133,11 +139,14 @@ Streamlit ダッシュボード · HTML レポート生成
 
 ### 2. Design_BrainModel — AIエージェント向け安全制御層
 
-**期間：** 2026年1月 〜 現在
+**期間：** 2026年1月 〜（v1 実装完了 / **v2 再設計予定**）
 **役割：** 設計・実装のすべて
 **規模：** Rust 約49,900行 / 60+ crate
 
 AIコーディングエージェントに、設計意図の保持と実行安全性を与える推論制御レイヤー。
+推論・記憶・アーキテクチャ評価の機構をすべて自前で構築した独立実装であり、
+**共通基盤（ReasonScript / MRA）が満たすべき要件を洗い出した先行実装**にあたります。
+v2 では、それらを基盤に委ねたうえで、MRA のソフトウェア設計ドメインモデルとして再設計します。
 
 **技術的な達成：**
 
@@ -172,13 +181,14 @@ AIコーディングエージェントに、設計意図の保持と実行安全
 
 → [詳細](projects/coherent.md)
 
-### 4. VisionWorldModel — 観測と推論を分離した世界モデル
+### 4. VisionWorldModel — MRA 視覚ドメインモデル
 
 **期間：** 2026年7月 〜 現在
 **役割：** 設計・実装のすべて
 **規模：** ReasonScript + Python 約7,700行
 
-ReasonScript を実用した最初の本格的応用プロジェクト。
+MRA の視覚ドメインモデルであり、ReasonScript を実用した最初の本格的実装。
+Molecular 表現の妥当性を、正解が曖昧さなく決まる実在の分子構造を題材に検証しています。
 
 **技術的な達成：**
 
@@ -193,10 +203,13 @@ ReasonScript を実用した最初の本格的応用プロジェクト。
 
 → [詳細](projects/visionworldmodel.md)
 
-### 5. LanguageModel — 責務分離型の言語モデル基盤
+### 5. LanguageModel — MRA 言語ドメインモデル
 
 **期間：** 2026年8月 〜 現在（Phase 0 完了）
 **役割：** 仕様策定
+
+MRA の言語ドメインモデル。その仕様書は、MRA 全体で共有される中核概念
+（Molecule · Evidence · Provenance · Truth Boundary）を最初に定式化した文書でもあります。
 
 **技術的な達成：**
 

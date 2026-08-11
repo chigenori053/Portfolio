@@ -13,16 +13,23 @@
             │
             └─── COHERENT            「記憶と推論を分離できるか？」
                      │
-2026-01 ─────────── Design_BrainModel 「AIの生成を、設計から逸脱させずに済むか？」
+2026-01 ─────────── Design_BrainModel v1
+                     │               「AIの生成を、設計から逸脱させずに済むか？」
                      │
 2026-04 ─────────── ★ ReasonScript    「そもそも言語処理系から作り直すべきでは？」
                      │
-2026-07 ─────────── VisionWorldModel  「観測と推論を分離できるか？」
-                     │
-2026-08 ─────────── LanguageModel     「言語モデルの責務を分割できるか？」
+                     ▼
+              ★ MRA — Molecular Reasoning Architecture（開発中）
+                     │               「知識を Molecule として表現し、
+                     │                ドメインをまたいで推論できるか？」
+     ┌───────────────┼───────────────────────┐
+     ▼               ▼                       ▼
+2026-07          2026-08                （再設計予定）
+VisionWorldModel  LanguageModel       Design_BrainModel v2
+  視覚ドメイン      言語ドメイン         ソフトウェア設計ドメイン
 ```
 
-問題意識が **「記述する」→「制御する」→「基盤から作る」→「基盤の上で応用する」** と
+問題意識が **「記述する」→「制御する」→「基盤から作る」→「基盤の上で、複数ドメインに展開する」** と
 移り変わっているのが読み取れます。
 
 ---
@@ -265,15 +272,42 @@ VisionWorldModel / LanguageModel（応用）
 
 ---
 
+## MRA という到達点
+
+2026年8月時点で、系譜は **MRA（Molecular Reasoning Architecture）** に収束しています。
+
+知識を**型付き Atom と Bond からなる Molecule** として表現し、
+Evidence と Provenance を伴う正規データとして扱う推論アーキテクチャです。
+ReasonScript がその実装手段を、MRA が表現と推論の枠組みを担います。
+
+そして MRA は、ドメインごとに専用モデルを持つ形で展開されます。
+
+| ドメインモデル | 対象 | 状態 |
+|---|---|---|
+| **VisionWorldModel** | 視覚 — 観測から世界状態を推定する | Phase 3C-1 まで検証完了 |
+| **LanguageModel** | 言語 — 自然言語から意味構造を再活性化する | Phase 0 完了 |
+| **Design_BrainModel v2** | ソフトウェア設計 — 設計意図と実装の整合を保つ | 再設計予定 |
+
+**視覚・言語・ソフトウェア設計という無関係な3ドメインが、同一の表現形式と推論契約を共有する。**
+これが成立するかどうかが、MRA の妥当性そのものの検証になります。
+
+Design_BrainModel v1 は、この構造の中では**先行実装**として位置づけられます。
+独立した Rust プロジェクトとして推論・記憶・検証を自前で作り切ったことで、
+共通基盤が満たすべき要件が明らかになりました。v2 ではそれらを ReasonScript と MRA Base に委ね、
+ソフトウェア設計ドメイン固有の推論に集中します。
+
+---
+
 ## 現在地
 
 | プロジェクト | 状態 |
 |---|---|
-| ReasonScript | v0.5.4.5 リリース済み。ReasonGraph/World ビューア、パッケージレジストリ、SDK公開APIマニフェストが未実装 |
-| Design_BrainModel | 自律実行ループ・実行安全制御は実装済み。Git統合と DesignUnit 統合が進行中 |
-| COHERENT | Phase 2（Coding Agent Integration）に向けて開発中 |
+| ReasonScript | v0.5.4.5 リリース済み（Apache-2.0）。ReasonGraph/World ビューア、パッケージレジストリ、SDK公開APIマニフェストが未実装 |
+| MRA | 開発中。Molecule / Evidence / Provenance と Truth Boundary を仕様として確立 |
 | VisionWorldModel | Phase 3C-1 まで検証完了。適応的構造推論に着手 |
 | LanguageModel | Phase 0 完了。Holographic Core 実装がこれから |
+| Design_BrainModel | v1 実装完了。ReasonScript + MRA Base による v2 再設計を予定 |
+| COHERENT | Phase 2（Coding Agent Integration）に向けて開発中 |
 | mathlang | 2025-11 で更新停止（後続プロジェクトに発想が継承済み） |
 
 ---

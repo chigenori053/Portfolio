@@ -13,53 +13,81 @@
 
 ## 系譜 / Project Lineage
 
+探索期に得た知見が基盤（ReasonScript）に結実し、その上で
+**MRA — Molecular Reasoning Architecture** という推論アーキテクチャの構築に向かっています。
+
 ```
-                        ┌──────────────────────────────┐
-   2025-11              │  mathlang                    │  推論過程を記述するDSL
-   ────────────         │  MathLang                    │  教育 → 研究への入口
-                        └──────────────┬───────────────┘
-                                       │
-                        ┌──────────────▼───────────────┐
-   2025-11              │  COHERENT                    │  想起(System 1) × 推論(System 2)
-   ────────────         │  Optical Holographic Memory  │  光学干渉メモリ
-                        └──────────────┬───────────────┘
-                                       │
-                        ┌──────────────▼───────────────┐
-   2026-01              │  Design_BrainModel           │  AIエージェントの安全・整合性制御層
-   ────────────         │  Rust / 60+ crates           │  設計意図の永続化
-                        └──────────────┬───────────────┘
-                                       │
-                        ┌──────────────▼───────────────┐
-   2026-04              │  ★ ReasonScript              │  基盤言語・決定論的実行処理系
-   ────────────         │  v0.5.4.5 / 6言語バインディング │  Surface AST → … → ExecutionPlan
-                        └──────────────┬───────────────┘
-                                       │
-                    ┌──────────────────┴──────────────────┐
-                    │                                     │
-      ┌─────────────▼─────────────┐       ┌───────────────▼──────────────┐
-      │  VisionWorldModel         │       │  LanguageModel               │
-      │  2026-07                  │       │  2026-08                     │
-      │  観測と推論の分離          │       │  MRA Holographic Semantic    │
-      │  ACCEPT/REVISE/DEFER/     │       │  Memory / Truth Boundary     │
-      │  ABSTAIN                  │       │                              │
-      └───────────────────────────┘       └──────────────────────────────┘
+  ■ 探索期 ────────────────────────────────────────────────────────
+
+   2025-11   mathlang              推論過程を記述するDSL
+                 │                 「過程を第一級のデータにする」
+                 ▼
+   2025-11   COHERENT              想起(System 1) × 推論(System 2)
+                 │                 光学干渉メモリ ── MRA 記憶モデルの前身
+                 ▼
+   2026-01   Design_BrainModel v1  AIエージェントの安全・整合性制御層
+                 │                 Rust / 60+ crates ── 決定論ゲートの設計
+                 │
+                 │  ここまでの知見が基盤要件として結実
+                 ▼
+  ■ 基盤 ──────────────────────────────────────────────────────────
+
+   2026-04   ★ ReasonScript        決定論的実行処理系（Apache-2.0）
+                 │                 Surface AST → … → ExecutionPlan
+                 │
+  ■ MRA ───────┴──────────────────────────────────────────────────
+
+            ★ MRA — Molecular Reasoning Architecture   ← 現在開発中
+              知識を型付き Atom / Bond からなる Molecule として表現する推論モデル
+                 │
+     ┌───────────┼────────────────────────┐
+     ▼           ▼                        ▼
+ VisionWorldModel   LanguageModel      Design_BrainModel v2
+  視覚ドメイン       言語ドメイン         ソフトウェア設計ドメイン
+  2026-07           2026-08              （再設計予定）
+
+  観測と推論の分離   Truth Boundary        設計意図と実装の整合
+  ACCEPT/REVISE/    連想記憶と正規知識
+  DEFER/ABSTAIN     の分離
 ```
 
-下流2プロジェクトは基盤を改変せず、ReasonScript の公開CLIと決定論的契約のみを利用します。
+### この構造が意味すること
+
+**一つの基盤の上に、視覚・言語・ソフトウェア設計という異なる3ドメインの応用が乗ります。**
+応用が1つしかない基盤は「その応用のために作ったもの」にしか見えませんが、
+3ドメインに展開されるなら、基盤設計が実際に汎用だったことの検証になります。
+
+各ドメインモデルは基盤を改変せず、ReasonScript の公開CLIと決定論的契約のみを利用します。
 `LanguageModel` は基盤をコミットハッシュ単位（`7f29c1c`）で固定しています。
 
 ---
 
 ## プロジェクト一覧 / Projects
 
-| プロジェクト | 概要 | 主言語 | 規模 | 詳細 |
+### 基盤 — Foundation
+
+| プロジェクト | 概要 | 主言語 | 規模 | ライセンス |
 |---|---|---|---|---|
-| **[ReasonScript](https://github.com/chigenori053/ReasonScript)** | 決定論的実行とロールバック安全性を言語仕様で保証する推論優先言語 | Python / Rust / TS / Go / Java | 約135,000行 · テスト1,085件 | [→ 詳細](docs/projects/reasonscript.md) |
-| **[Design_BrainModel](https://github.com/chigenori053/Design_BrainModel)** | AIコーディングエージェントに設計意図と実行安全性を与える推論制御層 | Rust | 約57,000行 · 60+ crate | [→ 詳細](docs/projects/design-brainmodel.md) |
-| **[COHERENT](https://github.com/chigenori053/COHERENT)** | 光学干渉メモリとアクション予測型推論を融合した Reasoning LM | Python | 約43,000行 | [→ 詳細](docs/projects/coherent.md) |
-| **[mathlang](https://github.com/chigenori053/mathlang)** | 数学的思考の過程そのものを記述・再生・検証するDSL | Python | 約9,200行 | [→ 詳細](docs/projects/mathlang.md) |
-| **[VisionWorldModel](https://github.com/chigenori053/VisonWorldModel)** | 観測と推論を分離し、判断を保留できる世界モデル検証系 | ReasonScript / Python | 約7,700行 | [→ 詳細](docs/projects/visionworldmodel.md) |
-| **[LanguageModel](https://github.com/chigenori053/LanguageModel)** | 連想記憶と正規知識を分離した言語モデル基盤（Phase 0・仕様策定段階） | Python / ReasonScript | 仕様書中心 | [→ 詳細](docs/projects/languagemodel.md) |
+| **[ReasonScript](https://github.com/chigenori053/ReasonScript)** | 決定論的実行とロールバック安全性を言語仕様で保証する推論優先言語 [→ 詳細](docs/projects/reasonscript.md) | Python / Rust / TS / Go / Java | 約135,000行 · テスト1,085件 | Apache-2.0 |
+
+### MRA ドメインモデル — Molecular Reasoning Architecture
+
+開発中の推論アーキテクチャ MRA を構成する、ドメイン別のモデル群です。
+
+| プロジェクト | ドメイン | 概要 | 規模 | 状態 |
+|---|---|---|---|---|
+| **[VisionWorldModel](https://github.com/chigenori053/VisonWorldModel)** | 視覚 | 観測と推論を分離し、判断を保留できる世界モデル [→ 詳細](docs/projects/visionworldmodel.md) | 約7,700行 | Phase 3C-1 |
+| **[LanguageModel](https://github.com/chigenori053/LanguageModel)** | 言語 | 連想記憶と正規知識を分離した言語モデル基盤 [→ 詳細](docs/projects/languagemodel.md) | 仕様書中心 | Phase 0 |
+| **[Design_BrainModel](https://github.com/chigenori053/Design_BrainModel)** | ソフトウェア設計 | AIエージェントに設計意図と実行安全性を与える制御層 [→ 詳細](docs/projects/design-brainmodel.md) | 約57,000行 · 60+ crate | **v1 完了 / v2 再設計予定** |
+
+### 探索期 — Exploration
+
+MRA と ReasonScript に至る過程で構築した、先行プロジェクトです。
+
+| プロジェクト | 概要 | 主言語 | 規模 | 状態 |
+|---|---|---|---|---|
+| **[COHERENT](https://github.com/chigenori053/COHERENT)** | 光学干渉メモリとアクション予測型推論を融合した Reasoning LM [→ 詳細](docs/projects/coherent.md) | Python | 約43,000行 | 継続中 |
+| **[mathlang](https://github.com/chigenori053/mathlang)** | 数学的思考の過程そのものを記述・再生・検証するDSL [→ 詳細](docs/projects/mathlang.md) | Python | 約9,200行 | 更新停止 |
 
 ---
 
@@ -142,11 +170,25 @@ Phase 0 → 1 → 2 → 3A → 3B-1 → 3B-2 → 3B-3 → 3C-1 と細かく刻�
 | | 状態 |
 |---|---|
 | **ReasonScript** | v0.5.4.5 リリース済み。CI 1,085件パス。ReasonGraph/World ビューア、パッケージレジストリ、SDK公開APIマニフェストが未実装 |
-| **Design_BrainModel** | 自律実行ループ・REPL・実行安全制御は実装済み。Git統合と DesignUnit 統合が進行中 |
-| **COHERENT** | Phase 2（Coding Agent Integration）に向けて開発中 |
+| **MRA** | 開発中。Molecule / Evidence / Provenance のデータモデルと Truth Boundary を仕様として確立した段階 |
 | **VisionWorldModel** | Phase 3C-1 まで検証完了。適応的構造推論に着手 |
 | **LanguageModel** | Phase 0（基盤固定・仕様策定）完了。Holographic Core 実装がこれから |
+| **Design_BrainModel** | v1（Rust）で自律実行ループ・実行安全制御・決定論ゲートを実装完了。**ReasonScript + MRA Base による v2 再設計を予定** |
+| **COHERENT** | Phase 2（Coding Agent Integration）に向けて開発中 |
+| **mathlang** | 2025-11 で更新停止（発想は後続に継承済み） |
 
 ---
 
-<sub>各リポジトリのライセンスは個別に確認してください。ReasonScript はルート LICENSE が未確定です（`vscode-extension/` のみ MIT）。</sub>
+## ライセンス方針 / Licensing
+
+**基盤ツールは開き、研究アーキテクチャ本体は留保する**という方針です。
+
+| 対象 | 方針 |
+|---|---|
+| **ReasonScript** | **Apache-2.0**。MRA の実装手段であり、研究対象ではないため公開 |
+| **mathlang** | **Apache-2.0**。MRA とは独立した初期実験のため公開 |
+| **MRA ドメインモデル**（VisionWorldModel / LanguageModel / Design_BrainModel） | **全権利留保。** 開発中のアーキテクチャを構成するため、現時点ではライセンスを付与していません |
+| **COHERENT** | **全権利留保。** 研究・検証プロジェクトのため |
+
+留保しているリポジトリのコードも、**閲覧と評価のために公開しています。**
+利用をご希望の場合は、各リポジトリの Issue でご相談ください。

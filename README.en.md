@@ -14,52 +14,81 @@ At the center is **ReasonScript**, a programming language built from scratch, wi
 
 ## Project Lineage
 
+Findings from an exploratory phase converged into a foundation (ReasonScript), on top of which
+**MRA — Molecular Reasoning Architecture** is now being built.
+
 ```
-                        ┌──────────────────────────────┐
-   2025-11              │  mathlang                    │  A DSL for reasoning processes
-   ────────────         │  MathLang                    │  Education → research
-                        └──────────────┬───────────────┘
-                                       │
-                        ┌──────────────▼───────────────┐
-   2025-11              │  COHERENT                    │  Recall (System 1) × Reasoning (System 2)
-   ────────────         │  Optical Holographic Memory  │
-                        └──────────────┬───────────────┘
-                                       │
-                        ┌──────────────▼───────────────┐
-   2026-01              │  Design_BrainModel           │  Safety & integrity layer for AI agents
-   ────────────         │  Rust / 60+ crates           │  Design-intent persistence
-                        └──────────────┬───────────────┘
-                                       │
-                        ┌──────────────▼───────────────┐
-   2026-04              │  ★ ReasonScript              │  Foundation language & runtime
-   ────────────         │  v0.5.4.5 / 6 lang bindings  │  Surface AST → … → ExecutionPlan
-                        └──────────────┬───────────────┘
-                                       │
-                    ┌──────────────────┴──────────────────┐
-      ┌─────────────▼─────────────┐       ┌───────────────▼──────────────┐
-      │  VisionWorldModel         │       │  LanguageModel               │
-      │  2026-07                  │       │  2026-08                     │
-      │  Observation vs inference │       │  MRA Holographic Semantic    │
-      │  ACCEPT/REVISE/DEFER/     │       │  Memory / Truth Boundary     │
-      │  ABSTAIN                  │       │                              │
-      └───────────────────────────┘       └──────────────────────────────┘
+  ■ Exploration ───────────────────────────────────────────────────
+
+   2025-11   mathlang              A DSL for reasoning processes
+                 │                 "Make the process first-class data"
+                 ▼
+   2025-11   COHERENT              Recall (System 1) × Reasoning (System 2)
+                 │                 Optical holographic memory ── precursor to MRA memory
+                 ▼
+   2026-01   Design_BrainModel v1  Safety & integrity layer for AI agents
+                 │                 Rust / 60+ crates ── determinism gate design
+                 │
+                 │  these findings crystallized into foundation requirements
+                 ▼
+  ■ Foundation ────────────────────────────────────────────────────
+
+   2026-04   ★ ReasonScript        Deterministic execution runtime (Apache-2.0)
+                 │                 Surface AST → … → ExecutionPlan
+                 │
+  ■ MRA ───────┴───────────────────────────────────────────────────
+
+            ★ MRA — Molecular Reasoning Architecture   ← in development
+              A reasoning model representing knowledge as Molecules
+              built from typed Atoms and Bonds
+                 │
+     ┌───────────┼────────────────────────┐
+     ▼           ▼                        ▼
+ VisionWorldModel   LanguageModel      Design_BrainModel v2
+  Vision domain     Language domain     Software-design domain
+  2026-07           2026-08             (redesign planned)
+
+  Observation vs    Truth Boundary       Design intent vs
+  inference         Associative recall   implementation
+  ACCEPT/REVISE/    vs canonical
+  DEFER/ABSTAIN     knowledge
 ```
 
-The two downstream projects never modify the foundation — they consume only ReasonScript's public CLI
-and its deterministic reasoning contract. `LanguageModel` pins the foundation to an exact commit (`7f29c1c`).
+**One foundation supporting three distinct application domains** — vision, language, and software
+design. A foundation with a single application only ever demonstrates that application; three
+independent domains are what actually test whether the design generalizes.
+
+Domain models never modify the foundation — they consume only ReasonScript's public CLI and its
+deterministic reasoning contract. `LanguageModel` pins the foundation to an exact commit (`7f29c1c`).
 
 ---
 
 ## Projects
 
-| Project | Summary | Stack | Scale |
-|---|---|---|---|
-| **[ReasonScript](https://github.com/chigenori053/ReasonScript)** | A reasoning-first language guaranteeing deterministic execution and rollback safety at the specification level | Python / Rust / TS / Go / Java | ~135k LOC · 1,085 tests |
-| **[Design_BrainModel](https://github.com/chigenori053/Design_BrainModel)** | A reasoning-and-control layer giving AI coding agents design intent and execution safety | Rust | ~57k LOC · 60+ crates |
-| **[COHERENT](https://github.com/chigenori053/COHERENT)** | A Reasoning LM fusing optical holographic memory with action-based reasoning | Python | ~43k LOC |
-| **[mathlang](https://github.com/chigenori053/mathlang)** | A DSL that captures, replays, and verifies the *process* of mathematical reasoning | Python | ~9.2k LOC |
-| **[VisionWorldModel](https://github.com/chigenori053/VisonWorldModel)** | A world-model validation system that separates observation from inference and can withhold judgment | ReasonScript / Python | ~7.7k LOC |
-| **[LanguageModel](https://github.com/chigenori053/LanguageModel)** | A language-model foundation separating associative memory from canonical knowledge (Phase 0, spec stage) | Python / ReasonScript | Specification-led |
+### Foundation
+
+| Project | Summary | Stack | Scale | License |
+|---|---|---|---|---|
+| **[ReasonScript](https://github.com/chigenori053/ReasonScript)** | A reasoning-first language guaranteeing deterministic execution and rollback safety at the specification level | Python / Rust / TS / Go / Java | ~135k LOC · 1,085 tests | Apache-2.0 |
+
+### MRA Domain Models
+
+Domain-specific models composing MRA, the reasoning architecture currently under development.
+
+| Project | Domain | Summary | Scale | Status |
+|---|---|---|---|---|
+| **[VisionWorldModel](https://github.com/chigenori053/VisonWorldModel)** | Vision | A world model separating observation from inference, able to withhold judgment | ~7.7k LOC | Phase 3C-1 |
+| **[LanguageModel](https://github.com/chigenori053/LanguageModel)** | Language | A foundation separating associative recall from canonical, evidence-backed knowledge | Specification-led | Phase 0 |
+| **[Design_BrainModel](https://github.com/chigenori053/Design_BrainModel)** | Software design | A control layer giving AI agents design intent and execution safety | ~57k LOC · 60+ crates | **v1 complete / v2 redesign planned** |
+
+### Exploration
+
+Predecessor projects that led to ReasonScript and MRA.
+
+| Project | Summary | Stack | Scale | Status |
+|---|---|---|---|---|
+| **[COHERENT](https://github.com/chigenori053/COHERENT)** | A Reasoning LM fusing optical holographic memory with action-based reasoning | Python | ~43k LOC | Ongoing |
+| **[mathlang](https://github.com/chigenori053/mathlang)** | A DSL that captures, replays, and verifies the *process* of mathematical reasoning | Python | ~9.2k LOC | Archived |
 
 Detailed write-ups are in Japanese under [`docs/projects/`](docs/projects/).
 
@@ -131,11 +160,25 @@ Roles:      Architect (human) / ResearchAgent / CodingAgent / ValidationAgent
 | | State |
 |---|---|
 | **ReasonScript** | v0.5.4.5 released; 1,085 CI tests passing. ReasonGraph/World viewers, package registry, and the SDK public API manifest remain open |
-| **Design_BrainModel** | Autonomous execution loop, REPL, and execution safety implemented; Git integration and DesignUnit integration in progress |
-| **COHERENT** | In development toward Phase 2 (Coding Agent Integration) |
+| **MRA** | In development. The Molecule / Evidence / Provenance data model and the Truth Boundary are established as specification |
 | **VisionWorldModel** | Validated through Phase 3C-1; adaptive structural reasoning underway |
 | **LanguageModel** | Phase 0 (foundation pinning, specification) complete; Holographic Core implementation next |
+| **Design_BrainModel** | v1 (Rust) complete — autonomous execution loop, execution safety, determinism gate. **v2 redesign planned on ReasonScript + MRA Base** |
+| **COHERENT** | In development toward Phase 2 (Coding Agent Integration) |
+| **mathlang** | Archived 2025-11; its ideas carried forward into later projects |
 
 ---
 
-<sub>Licenses are per-repository. ReasonScript has no finalized root LICENSE yet (only `vscode-extension/` is MIT).</sub>
+## Licensing
+
+The policy is to **open the foundational tooling and reserve the research architecture itself.**
+
+| Scope | Policy |
+|---|---|
+| **ReasonScript** | **Apache-2.0.** It is the means of implementing MRA, not the research object itself |
+| **mathlang** | **Apache-2.0.** An early experiment, independent of MRA |
+| **MRA domain models** (VisionWorldModel / LanguageModel / Design_BrainModel) | **All rights reserved.** They compose an architecture still under development |
+| **COHERENT** | **All rights reserved.** A research and validation project |
+
+Reserved repositories are still published **for reading and evaluation.**
+If you are interested in using any of them, please open an issue on that repository.

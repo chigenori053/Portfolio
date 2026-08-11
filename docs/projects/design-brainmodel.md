@@ -10,6 +10,23 @@
 | **主要言語** | Rust（約49,900行 / 539ファイル）· Python（約7,200行） |
 | **規模** | **60を超える crate** によるワークスペース · ドキュメント55本 |
 | **対象環境** | macOS（Apple Silicon 最適化）· Cargo · zsh |
+| **状態** | **v1 実装完了 / v2 再設計予定** |
+| **ライセンス** | 全権利留保（再設計中のため） |
+
+---
+
+## 本書の位置づけ — v1 と v2
+
+**本書が説明しているのは Design_BrainModel v1（現在の Rust 実装）です。**
+
+DBM は今後、**ReasonScript + MRA Base による v2 として再設計される予定**です。
+再設計後は、[MRA（Molecular Reasoning Architecture）](../../README.md#系譜--project-lineage) の
+**ソフトウェア設計ドメインモデル**として、[VisionWorldModel](visionworldmodel.md)（視覚）·
+[LanguageModel](languagemodel.md)（言語）と並ぶ位置に入ります。
+
+v1 は破棄されるものではありません。**MRA と ReasonScript が満たすべき要件を洗い出した先行実装**です。
+特に後述の決定論ゲート設計（FNV-1a、`{:.6}` の固定精度、`1e-6` の閾値）は、
+ReasonScript の決定論的コンパイルパイプラインに直接つながっています。
 
 ---
 
@@ -234,4 +251,30 @@ DBM は「AIにコードを書かせる」ツールではなく、**AIが書い�
 Rust を選んでいるのは、この制御レイヤー自体が壊れないこと——つまり**監視する側の信頼性**が
 前提条件になるためだと読めます。
 
-→ [設計思想の詳細](../design-philosophy.md)
+---
+
+## v2 への再設計
+
+v1 は独立した Rust プロジェクトとして、推論・記憶・アーキテクチャ評価の機構を
+すべて自前で構築しました。60を超える crate という規模は、その結果です。
+
+v2 では、これらを共通基盤に委ねます。
+
+| 関心事 | v1 | v2 |
+|---|---|---|
+| 決定論的実行 | `hybrid_vm` 等で自前実装 | **ReasonScript** の ExecutionPlan |
+| 知識・記憶表現 | `memory_space_*` · `chm` / `dhm` / `shm` を自前実装 | **MRA Base** の Molecule / Evidence / Provenance |
+| 設計意図の永続化 | `DesignUnit`（独自形式） | MRA の型付き Molecule として表現 |
+| 検証 | 独自の評価エンジン | ReasonScript の検証契約 + MRA の Evidence 検証 |
+
+これにより DBM は、**ソフトウェア設計というドメインに固有の推論**に集中できます。
+視覚（VisionWorldModel）· 言語（LanguageModel）と同じ基盤の上で、
+同じ Molecule 表現を使って設計知識を扱う——という構図です。
+
+v1 で確立した以下の設計は、v2 にも引き継がれる想定です。
+
+- Planner → Executor → Validation → Repair Loop → Convergence Control という推論ループ
+- コマンド分類による実行安全制御
+- Agent Operational Charter による権限階層と役割分担
+
+→ [設計思想の詳細](../design-philosophy.md) · [開発年表](../timeline.md)

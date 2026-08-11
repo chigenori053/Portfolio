@@ -46,8 +46,8 @@
   視覚ドメイン       言語ドメイン         ソフトウェア設計ドメイン
   2026-07           2026-08              （再設計予定）
 
-  観測と推論の分離   Truth Boundary        設計意図と実装の整合
-  ACCEPT/REVISE/    連想記憶と正規知識
+  観測と推論の分離   Truth Boundary        設計案 → システム構造
+  ACCEPT/REVISE/    連想記憶と正規知識     → コードの想起
   DEFER/ABSTAIN     の分離
 ```
 
@@ -78,7 +78,7 @@
 |---|---|---|---|---|
 | **[VisionWorldModel](https://github.com/chigenori053/VisonWorldModel)** | 視覚 | 観測と推論を分離し、判断を保留できる世界モデル [→ 詳細](docs/projects/visionworldmodel.md) | 約7,700行 | Phase 3C-1 |
 | **[LanguageModel](https://github.com/chigenori053/LanguageModel)** | 言語 | 連想記憶と正規知識を分離した言語モデル基盤 [→ 詳細](docs/projects/languagemodel.md) | 仕様書中心 | Phase 0 |
-| **[Design_BrainModel](https://github.com/chigenori053/Design_BrainModel)** | ソフトウェア設計 | AIエージェントに設計意図と実行安全性を与える制御層 [→ 詳細](docs/projects/design-brainmodel.md) | 約57,000行 · 60+ crate | **v1 完了 / v2 再設計予定** |
+| **[Design_BrainModel](https://github.com/chigenori053/Design_BrainModel)** | ソフトウェア設計 | 設計案からシステム構造を生成し、そこからコードを**想起する**コーディングエージェント [→ 詳細](docs/projects/design-brainmodel.md) | 約57,000行 · 60+ crate | **v1 完了 / v2 再設計予定** |
 
 ### 探索期 — Exploration
 
@@ -173,7 +173,7 @@ Phase 0 → 1 → 2 → 3A → 3B-1 → 3B-2 → 3B-3 → 3C-1 と細かく刻�
 | **MRA** | 開発中。Molecule / Evidence / Provenance のデータモデルと Truth Boundary を仕様として確立した段階 |
 | **VisionWorldModel** | Phase 3C-1 まで検証完了。適応的構造推論に着手 |
 | **LanguageModel** | Phase 0（基盤固定・仕様策定）完了。Holographic Core 実装がこれから |
-| **Design_BrainModel** | v1（Rust）で自律実行ループ・実行安全制御・決定論ゲートを実装完了。**ReasonScript + MRA Base による v2 再設計を予定** |
+| **Design_BrainModel** | v1（Rust）で自律実行ループ・実行安全制御・決定論ゲートを実装完了。**ReasonScript + MRA Base による v2 再設計を予定**（設計案 → システム構造 → コード想起の三段パイプライン） |
 | **COHERENT** | Phase 2（Coding Agent Integration）に向けて開発中 |
 | **mathlang** | 2025-11 で更新停止（発想は後続に継承済み） |
 

@@ -263,7 +263,7 @@ VisionWorldModel / LanguageModel（応用）
 |---|---|
 | mathlang | 答え / 過程 |
 | COHERENT | 想起（System 1）/ 推論（System 2） |
-| Design_BrainModel | 設計意図 / 実装コード、提案する者 / 実装する者 |
+| Design_BrainModel | 設計意図 / システム構造 / コード、提案する者 / 実装する者 |
 | ReasonScript | 構文 / 意味 / 中間表現 / 実行計画 |
 | VisionWorldModel | 観測 / 推論 |
 | LanguageModel | 連想記憶 / 正規知識 |
@@ -286,7 +286,7 @@ ReasonScript がその実装手段を、MRA が表現と推論の枠組みを担
 |---|---|---|
 | **VisionWorldModel** | 視覚 — 観測から世界状態を推定する | Phase 3C-1 まで検証完了 |
 | **LanguageModel** | 言語 — 自然言語から意味構造を再活性化する | Phase 0 完了 |
-| **Design_BrainModel v2** | ソフトウェア設計 — 設計意図と実装の整合を保つ | 再設計予定 |
+| **Design_BrainModel v2** | ソフトウェア設計 — 設計案からシステム構造を生成し、コードを想起する | 再設計予定 |
 
 **視覚・言語・ソフトウェア設計という無関係な3ドメインが、同一の表現形式と推論契約を共有する。**
 これが成立するかどうかが、MRA の妥当性そのものの検証になります。

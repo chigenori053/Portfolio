@@ -48,9 +48,9 @@ Findings from an exploratory phase converged into a foundation (ReasonScript), o
   Vision domain     Language domain     Software-design domain
   2026-07           2026-08             (redesign planned)
 
-  Observation vs    Truth Boundary       Design intent vs
-  inference         Associative recall   implementation
-  ACCEPT/REVISE/    vs canonical
+  Observation vs    Truth Boundary       Design → system
+  inference         Associative recall   structure → code
+  ACCEPT/REVISE/    vs canonical         recall
   DEFER/ABSTAIN     knowledge
 ```
 
@@ -79,7 +79,7 @@ Domain-specific models composing MRA, the reasoning architecture currently under
 |---|---|---|---|---|
 | **[VisionWorldModel](https://github.com/chigenori053/VisonWorldModel)** | Vision | A world model separating observation from inference, able to withhold judgment | ~7.7k LOC | Phase 3C-1 |
 | **[LanguageModel](https://github.com/chigenori053/LanguageModel)** | Language | A foundation separating associative recall from canonical, evidence-backed knowledge | Specification-led | Phase 0 |
-| **[Design_BrainModel](https://github.com/chigenori053/Design_BrainModel)** | Software design | A control layer giving AI agents design intent and execution safety | ~57k LOC · 60+ crates | **v1 complete / v2 redesign planned** |
+| **[Design_BrainModel](https://github.com/chigenori053/Design_BrainModel)** | Software design | A coding agent that generates system structure from an agreed design, then **recalls** code from that structure | ~57k LOC · 60+ crates | **v1 complete / v2 redesign planned** |
 
 ### Exploration
 
@@ -163,7 +163,7 @@ Roles:      Architect (human) / ResearchAgent / CodingAgent / ValidationAgent
 | **MRA** | In development. The Molecule / Evidence / Provenance data model and the Truth Boundary are established as specification |
 | **VisionWorldModel** | Validated through Phase 3C-1; adaptive structural reasoning underway |
 | **LanguageModel** | Phase 0 (foundation pinning, specification) complete; Holographic Core implementation next |
-| **Design_BrainModel** | v1 (Rust) complete — autonomous execution loop, execution safety, determinism gate. **v2 redesign planned on ReasonScript + MRA Base** |
+| **Design_BrainModel** | v1 (Rust) complete — autonomous execution loop, execution safety, determinism gate. **v2 redesign planned on ReasonScript + MRA Base**: design → system structure → code recall |
 | **COHERENT** | In development toward Phase 2 (Coding Agent Integration) |
 | **mathlang** | Archived 2025-11; its ideas carried forward into later projects |
 

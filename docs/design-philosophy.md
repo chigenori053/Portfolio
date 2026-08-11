@@ -91,6 +91,11 @@ ReasoningAgent と ValidationEngine（System 2）が検証して確定します�
 | LanguageModel | HolographicMemory | Molecular Memory + Evidence 検証 |
 | COHERENT | Optical Holographic Store | ReasoningAgent + ValidationEngine |
 | VisionWorldModel | 観測（VisualAtom） | 推論（World components）+ Decision |
+| Design_BrainModel v2 | システム構造から**想起**されたコード | 設計意図とその検証 |
+
+Design_BrainModel が「コードを生成する」ではなく **「コードを想起する」**と表現しているのは、
+この原則に従っているためです。想起されたコードは候補でしかなく、
+それが正しいかを決めるのは上位にある設計意図です。
 
 ### なぜこれが重要か
 

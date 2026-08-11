@@ -26,10 +26,11 @@ Findings from an exploratory phase converged into a foundation (ReasonScript), o
    2025-11   COHERENT              Recall (System 1) × Reasoning (System 2)
                  │                 Optical holographic memory ── precursor to MRA memory
                  ▼
-   2026-01   Design_BrainModel v1  Safety & integrity layer for AI agents
-                 │                 Rust / 60+ crates ── determinism gate design
+   2026-01   Design_BrainModel v1  A coding agent that recalls code
+                 │                 Rust / 60+ crates ── incomplete product
                  │
-                 │  these findings crystallized into foundation requirements
+                 │  hit reasoning explosion and memory-core limits;
+                 │  decided to rebuild from the foundation
                  ▼
   ■ Foundation ────────────────────────────────────────────────────
 
@@ -79,7 +80,7 @@ Domain-specific models composing MRA, the reasoning architecture currently under
 |---|---|---|---|---|
 | **[VisionWorldModel](https://github.com/chigenori053/VisonWorldModel)** | Vision | A world model separating observation from inference, able to withhold judgment | ~7.7k LOC | Phase 3C-1 |
 | **[LanguageModel](https://github.com/chigenori053/LanguageModel)** | Language | A foundation separating associative recall from canonical, evidence-backed knowledge | Specification-led | Phase 0 |
-| **[Design_BrainModel](https://github.com/chigenori053/Design_BrainModel)** | Software design | A coding agent that generates system structure from an agreed design, then **recalls** code from that structure | ~57k LOC · 60+ crates | **v1 complete / v2 redesign planned** |
+| **[Design_BrainModel](https://github.com/chigenori053/Design_BrainModel)** | Software design | A coding agent that generates system structure from an agreed design, then **recalls** code from that structure | ~57k LOC · 60+ crates | **v1 incomplete / v2 redesign planned** |
 
 ### Exploration
 
@@ -163,7 +164,7 @@ Roles:      Architect (human) / ResearchAgent / CodingAgent / ValidationAgent
 | **MRA** | In development. The Molecule / Evidence / Provenance data model and the Truth Boundary are established as specification |
 | **VisionWorldModel** | Validated through Phase 3C-1; adaptive structural reasoning underway |
 | **LanguageModel** | Phase 0 (foundation pinning, specification) complete; Holographic Core implementation next |
-| **Design_BrainModel** | v1 (Rust) complete — autonomous execution loop, execution safety, determinism gate. **v2 redesign planned on ReasonScript + MRA Base**: design → system structure → code recall |
+| **Design_BrainModel** | **v1 is an incomplete product** — abandoned after reasoning explosion caused system freezes, the memory core failed to learn as expected, and HolographicMemory proved too large to be practical. These three limits directly motivated **ReasonScript**. **v2 redesign planned on ReasonScript + MRA Base** |
 | **COHERENT** | In development toward Phase 2 (Coding Agent Integration) |
 | **mathlang** | Archived 2025-11; its ideas carried forward into later projects |
 

@@ -119,7 +119,7 @@ mathlang の直後、わずか2週間後に始まっています。
 | 検証項目 | 結果 |
 |---|---|
 | 三値判定 | **成立** — `AcceptStore` / `ReviewStore` / `RejectStore` として実装 |
-| 計算資源の効率化 | **実証** — 最適しきい値 θ\*=0.7 で**誤想起率 0%・計算削減 80.0%** |
+| 計算資源の効率化 | **設計確認のみ**（実証ではない）— 5件の固定シナリオでしきい値を掃引し、意図どおり動くことを確認。共鳴スコアはテスト内の定数であり、性能は未測定 |
 | 数式の正誤・同値判定 | **成功** |
 | 言語生成 | **部分的に成功** — 単語・多言語 100%、カタカナ 100%、漢字 60〜80% |
 
@@ -239,7 +239,7 @@ Python 側のツールチェーンがネイティブ Rust 実行ファイルを�
 | **ランタイム** | RuntimeReal / HybridRuntime / NativeReasonUnitRuntime / ClusterRuntime / VisionRuntime / VisualizationRuntime / RuntimeComplex |
 | **クロス言語** | Rust / Python / TypeScript / Go / Java の共通DTO契約 |
 | **ツール** | `reason` CLI、`reason view` CodeViewer、IDE、VS Code拡張、LSP、Playground |
-| **品質** | CI パイプライン（1,085テスト）、Conformance フレームワーク、Golden コーパス |
+| **品質** | CI パイプライン（実行確認済み: 1,116テスト PASS）、Conformance フレームワーク、Golden コーパス |
 
 ### バージョンの歩み
 
@@ -399,7 +399,7 @@ Design_BrainModel v1 は、この構造の中では**先行実装**として位�
 | VisionWorldModel | Phase 3C-1 まで検証完了。適応的構造推論に着手 |
 | LanguageModel | Phase 0 完了。Holographic Core 実装がこれから |
 | Design_BrainModel | **v1 は未完成プロダクト**（推論爆発は強引な抑制のみで安定の根拠がなく、記憶機構も期待した学習と容量効率に至らず）。ReasonScript + MRA Base による v2 再設計を予定 |
-| COHERENT | 理論検証を継続中。計算削減 80.0%（誤想起率 0%）· 数式の正誤判定 · 単語/多言語の想起 100% を実証。漢字生成 60〜80% が残課題（属性定義の重複が原因と特定済み） |
+| COHERENT | 理論検証を継続中。**実測で裏付けのある成果は、日英60語の想起 100%（劣化率 0.00%）と数式の正誤判定**。文字生成はカタカナ100%・漢字60〜80%だが生成スクリプトが未収録。記憶再利用による計算削減は**未測定**（5件の設計確認のみ） |
 | mathlang | 2025-11 で更新停止（後続プロジェクトに発想が継承済み） |
 
 ---

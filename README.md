@@ -4,6 +4,27 @@
 
 **「AIの出力を信じる」から「AIの推論を検証する」へ。**
 
+**AIの推論を検証可能にするための言語処理系と推論アーキテクチャを、個人で設計・実装しています。**
+以下6リポジトリはすべて個人プロジェクトであり、設計・実装・検証を単独で担当しています
+（AIコーディングエージェントを併用）。
+
+- **GitHub** — [@chigenori053](https://github.com/chigenori053)
+- **専門** — 言語処理系設計 · 推論システムアーキテクチャ · AI検証基盤
+- **主言語** — Python · Rust
+
+## 2分で見る場合
+
+| | |
+|---|---|
+| **最初に見るなら** | **[ReasonScript](https://github.com/chigenori053/ReasonScript)** — 推論を記述する状態遷移記述言語。Python 実行系 + Rust ランタイムの Hybrid DSL（Apache-2.0） |
+| **検証済みの成果** | `./reason ci` を実行し**全ステージ PASS / 1,116テスト通過**を確認（2026-08-12, commit `0efb2ab`）<br>COHERENT で**日英60語の想起 100%・言語混在による劣化率 0.00%**（実測共鳴値つきCSVあり）<br>ReasonScript を**実際に使って**別ドメイン（VisionWorldModel）のモデルを `.rsn` で全面記述 |
+| **正直に言うと** | Design_BrainModel v1 は**未完成プロダクト**（推論爆発を抑え込んではいるが安定の根拠がない）。COHERENT の計算削減効果は**未測定**。詳細は各ページに証拠の強さつきで記載しています |
+| **もっと読むなら** | [設計思想](docs/design-philosophy.md) · [開発年表](docs/timeline.md) · [技術経歴書](docs/technical-profile.md) |
+
+<sub>本ポートフォリオでは、**主張ごとに証拠の強さ（実測 / 実行結果 / 設計確認のみ / 未測定 / 再現不可）を明示**しています。裏付けの弱い数字を強い成果として提示しないことを方針としています。</sub>
+
+---
+
 このポートフォリオは、大規模言語モデルが抱える非決定性・検証不可能性・設計意図の喪失という課題に対して、
 **決定論的な言語処理系と、記憶と真実を分離した推論アーキテクチャ**で応えようとする一連の研究開発をまとめたものです。
 
@@ -71,7 +92,7 @@
 
 | プロジェクト | 概要 | 主言語 | 規模 | ライセンス |
 |---|---|---|---|---|
-| **[ReasonScript](https://github.com/chigenori053/ReasonScript)** | **推論を記述するための状態遷移記述言語。**決定論的実行とロールバック安全性を言語仕様で保証する [→ 詳細](docs/projects/reasonscript.md) | **Hybrid DSL** — 実行系: Python / ランタイム: Rust | 約133,600行 · テスト1,085件 | Apache-2.0 |
+| **[ReasonScript](https://github.com/chigenori053/ReasonScript)** | **推論を記述するための状態遷移記述言語。**決定論的実行とロールバック安全性を言語仕様で保証する [→ 詳細](docs/projects/reasonscript.md) | **Hybrid DSL** — 実行系: Python / ランタイム: Rust | 約133,600行 · **CI 1,116件パス（実行確認済み）** | Apache-2.0 |
 
 ### MRA ドメインモデル — Molecular Reasoning Architecture
 
@@ -90,7 +111,7 @@ MRA と ReasonScript に至る過程で構築した、先行プロジェクト�
 | プロジェクト | 概要 | 主言語 | 規模 | 状態 |
 |---|---|---|---|---|
 | **[COHERENT](https://github.com/chigenori053/COHERENT)** | **理論検証プロジェクト**（推論モデル名 **BrainModel**）。Transformer に依らない推論の成立可能性を、光学干渉のシミュレーションと記憶再利用によって検証 [→ 詳細](docs/projects/coherent.md) | Python | 約43,000行 | 検証継続中 |
-| **[mathlang](https://github.com/chigenori053/mathlang)** | **数学学習支援言語**（Python ベースの DSL）。人間が書く数式を Parser で正規化し、SymPy をランタイムに組み込んで**数式の正誤判定**を行う [→ 詳細](docs/projects/mathlang.md) | Python | 約9,200行 | 更新停止（Apache-2.0） |
+| **[mathlang](https://github.com/chigenori053/mathlang)** | **数学学習支援言語**（Python ベースの DSL）。人間が書く数式を Parser で正規化し、SymPy をランタイムに組み込んで**数式の正誤判定**を行う [→ 詳細](docs/projects/mathlang.md) | Python | 約9,200行 | 開発停止（Apache-2.0） |
 
 ---
 
@@ -173,12 +194,12 @@ Phase 0 → 1 → 2 → 3A → 3B-1 → 3B-2 → 3B-3 → 3C-1 と細かく刻�
 
 | | 状態 |
 |---|---|
-| **ReasonScript** | v0.5.4.5 リリース済み。CI 1,085件パス。ReasonGraph/World ビューア、パッケージレジストリ、SDK公開APIマニフェストが未実装 |
+| **ReasonScript** | v0.5.4.5 リリース済み。**`./reason ci` を実行し、全ステージ PASS / 1,116件のテスト通過を確認**（2026-08-12、commit `0efb2ab`、Python 3.14.0）。ReasonGraph/World ビューア、パッケージレジストリ、SDK公開APIマニフェストが未実装 |
 | **MRA** | 開発中。Molecule / Evidence / Provenance のデータモデルと Truth Boundary を仕様として確立した段階 |
 | **VisionWorldModel** | Phase 3C-1 まで検証完了。適応的構造推論に着手 |
 | **LanguageModel** | Phase 0（基盤固定・仕様策定）完了。Holographic Core 実装がこれから |
 | **Design_BrainModel** | **v1 は未完成プロダクト** — ①推論爆発によるシステムフリーズ（現状は強引な抑制のみで、安定稼働の根拠がない）②記憶機構が期待した学習能力を発揮しなかった ③HolographicMemory の容量が実用に耐えない。この3つが **ReasonScript 開発の直接の動機**。**ReasonScript + MRA Base による v2 再設計を予定** |
-| **COHERENT** | 言語生成は部分的に成功（文字・単語・多言語で実証、漢字は属性定義の重複により60〜80%）。数式の正誤判定は成功。計算資源の削減（記憶想起による推論スキップ）は **80%** を記録 |
+| **COHERENT** | **単語・多言語の想起 100%（60語・実測データあり）**が最も確度の高い成果。数式の正誤判定も成立。文字生成はカタカナ100%・漢字60〜80%（生成スクリプト未収録のため再現不可）。「記憶があれば計算しない」機構は**5件の固定シナリオによる設計確認のみ**で、性能としては未測定 |
 | **mathlang** | 2025-11 で更新停止。学習支援のために解いた課題（過程の記述・再生・同値判定）が後続すべての土台になった |
 
 ---

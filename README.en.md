@@ -72,7 +72,7 @@ deterministic reasoning contract. `LanguageModel` pins the foundation to an exac
 
 | Project | Summary | Stack | Scale | License |
 |---|---|---|---|---|
-| **[ReasonScript](https://github.com/chigenori053/ReasonScript)** | A **state-transition language for describing reasoning**, guaranteeing deterministic execution and rollback safety at the specification level | **Hybrid DSL** — Python front end / Rust runtime | ~133.6k LOC · 1,085 tests | Apache-2.0 |
+| **[ReasonScript](https://github.com/chigenori053/ReasonScript)** | A **state-transition language for describing reasoning**, guaranteeing deterministic execution and rollback safety at the specification level | **Hybrid DSL** — Python front end / Rust runtime | ~133.6k LOC · **1,116 CI tests, verified by running them** | Apache-2.0 |
 
 ### MRA Domain Models
 
@@ -91,7 +91,7 @@ Predecessor projects that led to ReasonScript and MRA.
 | Project | Summary | Stack | Scale | Status |
 |---|---|---|---|---|
 | **[COHERENT](https://github.com/chigenori053/COHERENT)** | A **theory-validation project** (reasoning model: **BrainModel**) testing whether reasoning can hold without Transformers, via simulated optical interference and memory reuse | Python | ~43k LOC | Validation ongoing |
-| **[mathlang](https://github.com/chigenori053/mathlang)** | A **math-learning support language** (Python-based DSL). Normalizes human-written notation via its own parser and embeds SymPy in the runtime to **judge the correctness of expressions** | Python | ~9.2k LOC | Archived (Apache-2.0) |
+| **[mathlang](https://github.com/chigenori053/mathlang)** | A **math-learning support language** (Python-based DSL). Normalizes human-written notation via its own parser and embeds SymPy in the runtime to **judge the correctness of expressions** | Python | ~9.2k LOC | Inactive since 2025-11 (Apache-2.0) |
 
 Detailed write-ups are in Japanese under [`docs/projects/`](docs/projects/).
 
@@ -163,13 +163,13 @@ Roles:      Architect (human) / ResearchAgent / CodingAgent / ValidationAgent
 
 | | State |
 |---|---|
-| **ReasonScript** | v0.5.4.5 released; 1,085 CI tests passing. ReasonGraph/World viewers, package registry, and the SDK public API manifest remain open |
+| **ReasonScript** | v0.5.4.5 released. **`./reason ci` was executed for this portfolio: all stages PASS, 1,116 tests** (2026-08-12, commit `0efb2ab`, Python 3.14.0). ReasonGraph/World viewers, package registry, and the SDK public API manifest remain open |
 | **MRA** | In development. The Molecule / Evidence / Provenance data model and the Truth Boundary are established as specification |
 | **VisionWorldModel** | Validated through Phase 3C-1; adaptive structural reasoning underway |
 | **LanguageModel** | Phase 0 (foundation pinning, specification) complete; Holographic Core implementation next |
 | **Design_BrainModel** | **v1 is an incomplete product** — (1) reasoning explosion caused system freezes; it is currently only forcibly suppressed, with no basis to claim stable operation, (2) the memory core did not learn as expected, (3) HolographicMemory proved too large to be practical. These three limits directly motivated **ReasonScript**. **v2 redesign planned on ReasonScript + MRA Base** |
-| **COHERENT** | Language generation partially validated (characters, words, and multilingual recall confirmed; kanji at 60–80% due to overlapping attribute definitions). Equation correctness judgment validated. Compute saved by recall-instead-of-inference reached **80%** |
-| **mathlang** | Archived 2025-11. The problems solved for learners — recording, replaying, and equivalence-checking a reasoning process — became the foundation for everything that followed |
+| **COHERENT** | The strongest result is **100% recall over 60 words across two languages, backed by measured data**. Equation correctness judgment also holds. Character generation reached 100% for katakana and 60–80% for kanji, but the generating scripts are not in the repository. The recall-instead-of-inference mechanism has only a **5-case design check** — its performance is unmeasured |
+| **mathlang** | Inactive since 2025-11. The problems solved for learners — recording, replaying, and equivalence-checking a reasoning process — became the foundation for everything that followed |
 
 ---
 

@@ -42,7 +42,7 @@ Molecule として表現する推論アーキテクチャ——を構築中で�
 
 | スキル | 根拠となる実装 |
 |---|---|
-| 字句解析・構文解析 | ReasonScript パーサ、mathlang `core/parser.py` |
+| 字句解析・構文解析 | ReasonScript パーサ、mathlang `core/parser.py` および人間向け数式記法を正規化する `MathLangInputParser` |
 | AST 設計 | Surface AST と Semantic AST の二層分離、`ast_nodes.py` |
 | 中間表現（IR）設計 | Reason IR（JSON Schema による機械検証付き） |
 | 実行計画生成 | ExecutionPlan の決定論的生成 |
@@ -68,7 +68,7 @@ Molecule として表現する推論アーキテクチャ——を構築中で�
 | スキル | 根拠となる実装 |
 |---|---|
 | 処理系・ランタイム実装 | ReasonScript ツールチェーン（543ファイル） |
-| 記号計算 | SymPy 統合（mathlang `symbolic_engine.py`、COHERENT `SymbolicEngine`） |
+| 記号計算 | SymPy 統合（mathlang `symbolic_engine.py`、COHERENT `SymbolicEngine`）、数値サンプリングによる同値判定フォールバック |
 | 数値計算 | 複素テンソル演算、Conv2d/MaxPool2d/AvgPool2d、リバースモード自動微分 |
 | テスト設計 | pytest / unittest、239テストファイル、Golden コーパス |
 | パッケージ管理 | uv、pyproject.toml、Python 3.12 |
@@ -259,18 +259,31 @@ MRA の言語ドメインモデル。その仕様書は、MRA 全体で共有さ
 
 → [詳細](projects/languagemodel.md)
 
-### 6. mathlang — 数学的思考過程のDSL
+### 6. mathlang — 数学学習支援言語（Python ベースの DSL）
 
 **期間：** 2025年11月
-**役割：** 設計・実装のすべて
+**役割：** 企画・設計・実装のすべて
 **規模：** Python 約9,200行
+
+**中学生以上の学生を対象に、プログラミング学習と数学学習の双方を支援する
+プロダクト**として開発。研究目的の実験言語ではなく、学習支援ツールが出発点です。
 
 **技術的な達成：**
 
+- **`MathLangInputParser` を設計・実装** — `x^2` → `x**2`、`2xy` → `2*x*y`、
+  `√x` → `sqrt(x)`、`(x-1)(x+1)` → `(x-1)*(x+1)` のように、
+  **教科書どおりの数式表記を Python / SymPy が解釈できる形へ正規化**。
+  仕様として *"hides Python/SymPy-like syntax from educational users"* を明示
+- **SymbolicAI（SymPy）をランタイムに統合**（`SymbolicEngine`）。同値判定・簡約・
+  評価・変形説明を提供し、SymPy 非搭載環境向けに**数値サンプリングによる
+  同値判定のフォールバック**も実装
+- **数式の正誤判定を実装**（`ValidationEngine`）。`symbolic_equiv` / `exact_form` /
+  `canonical_form` の3モードにより、**形の異なる複数の解答を正解として受理**しつつ、
+  「数学的には正しいが求められた形ではない」を区別できる判定を実現
+- 誤りの原因を推定する因果解析エンジンを実装し、**修正候補を複数（最大3件）提示**
 - 変形の前後と根拠（`before` / `after` / `note`）を**構文として強制する**DSLを設計
 - 反実仮想（counterfactual）を言語機能として実装
 - 推論ステップを構造化JSONとして記録する LearningLogger を実装
-- 誤りの原因を推定する因果解析エンジンを実装
 - Edu / Pro / Demo の3層CLIと、JSON設定によるシナリオ機構を構築
 
 → [詳細](projects/mathlang.md)

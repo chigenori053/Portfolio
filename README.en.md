@@ -20,8 +20,8 @@ Findings from an exploratory phase converged into a foundation (ReasonScript), o
 ```
   ■ Exploration ───────────────────────────────────────────────────
 
-   2025-11   mathlang              A DSL for reasoning processes
-                 │                 "Make the process first-class data"
+   2025-11   mathlang              A math-learning support language (Python DSL)
+                 │                 Expression correctness judgment
                  ▼
    2025-11   COHERENT              Theory-validation project (reasoning model: BrainModel)
                  │                 "Can non-Transformer reasoning match an LLM?"
@@ -90,7 +90,7 @@ Predecessor projects that led to ReasonScript and MRA.
 | Project | Summary | Stack | Scale | Status |
 |---|---|---|---|---|
 | **[COHERENT](https://github.com/chigenori053/COHERENT)** | A **theory-validation project** (reasoning model: **BrainModel**) testing whether reasoning can hold without Transformers, via simulated optical interference and memory reuse | Python | ~43k LOC | Validation ongoing |
-| **[mathlang](https://github.com/chigenori053/mathlang)** | A DSL that captures, replays, and verifies the *process* of mathematical reasoning | Python | ~9.2k LOC | Archived |
+| **[mathlang](https://github.com/chigenori053/mathlang)** | A **math-learning support language** (Python-based DSL). Normalizes human-written notation via its own parser and embeds SymPy in the runtime to **judge the correctness of expressions** | Python | ~9.2k LOC | Archived (Apache-2.0) |
 
 Detailed write-ups are in Japanese under [`docs/projects/`](docs/projects/).
 
@@ -168,7 +168,7 @@ Roles:      Architect (human) / ResearchAgent / CodingAgent / ValidationAgent
 | **LanguageModel** | Phase 0 (foundation pinning, specification) complete; Holographic Core implementation next |
 | **Design_BrainModel** | **v1 is an incomplete product** — (1) reasoning explosion caused system freezes; it is currently only forcibly suppressed, with no basis to claim stable operation, (2) the memory core did not learn as expected, (3) HolographicMemory proved too large to be practical. These three limits directly motivated **ReasonScript**. **v2 redesign planned on ReasonScript + MRA Base** |
 | **COHERENT** | Language generation partially validated (characters, words, and multilingual recall confirmed; kanji at 60–80% due to overlapping attribute definitions). Equation correctness judgment validated. Compute saved by recall-instead-of-inference reached **80%** |
-| **mathlang** | Archived 2025-11; its ideas carried forward into later projects |
+| **mathlang** | Archived 2025-11. The problems solved for learners — recording, replaying, and equivalence-checking a reasoning process — became the foundation for everything that followed |
 
 ---
 

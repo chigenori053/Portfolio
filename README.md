@@ -19,8 +19,8 @@
 ```
   ■ 探索期 ────────────────────────────────────────────────────────
 
-   2025-11   mathlang              推論過程を記述するDSL
-                 │                 「過程を第一級のデータにする」
+   2025-11   mathlang              数学学習支援言語（Python ベースの DSL）
+                 │                 数式の正誤判定 ──「過程を第一級のデータにする」
                  ▼
    2025-11   COHERENT              理論検証プロジェクト（推論モデル名: BrainModel）
                  │                 「Transformer 以外で LLM 同等の推論は可能か」
@@ -89,7 +89,7 @@ MRA と ReasonScript に至る過程で構築した、先行プロジェクト�
 | プロジェクト | 概要 | 主言語 | 規模 | 状態 |
 |---|---|---|---|---|
 | **[COHERENT](https://github.com/chigenori053/COHERENT)** | **理論検証プロジェクト**（推論モデル名 **BrainModel**）。Transformer に依らない推論の成立可能性を、光学干渉のシミュレーションと記憶再利用によって検証 [→ 詳細](docs/projects/coherent.md) | Python | 約43,000行 | 検証継続中 |
-| **[mathlang](https://github.com/chigenori053/mathlang)** | 数学的思考の過程そのものを記述・再生・検証するDSL [→ 詳細](docs/projects/mathlang.md) | Python | 約9,200行 | 更新停止 |
+| **[mathlang](https://github.com/chigenori053/mathlang)** | **数学学習支援言語**（Python ベースの DSL）。人間が書く数式を Parser で正規化し、SymPy をランタイムに組み込んで**数式の正誤判定**を行う [→ 詳細](docs/projects/mathlang.md) | Python | 約9,200行 | 更新停止（Apache-2.0） |
 
 ---
 
@@ -178,7 +178,7 @@ Phase 0 → 1 → 2 → 3A → 3B-1 → 3B-2 → 3B-3 → 3C-1 と細かく刻�
 | **LanguageModel** | Phase 0（基盤固定・仕様策定）完了。Holographic Core 実装がこれから |
 | **Design_BrainModel** | **v1 は未完成プロダクト** — ①推論爆発によるシステムフリーズ（現状は強引な抑制のみで、安定稼働の根拠がない）②記憶機構が期待した学習能力を発揮しなかった ③HolographicMemory の容量が実用に耐えない。この3つが **ReasonScript 開発の直接の動機**。**ReasonScript + MRA Base による v2 再設計を予定** |
 | **COHERENT** | 言語生成は部分的に成功（文字・単語・多言語で実証、漢字は属性定義の重複により60〜80%）。数式の正誤判定は成功。計算資源の削減（記憶想起による推論スキップ）は **80%** を記録 |
-| **mathlang** | 2025-11 で更新停止（発想は後続に継承済み） |
+| **mathlang** | 2025-11 で更新停止。学習支援のために解いた課題（過程の記述・再生・同値判定）が後続すべての土台になった |
 
 ---
 

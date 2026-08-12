@@ -18,7 +18,8 @@
 2026-01 ─────────── Design_BrainModel v1
                      │               「設計意図からコードを想起できるか？」
                      │
-2026-04 ─────────── ★ ReasonScript    「そもそも言語処理系から作り直すべきでは？」
+2026-04 ─────────── ★ ReasonScript    状態遷移記述言語（Hybrid DSL）
+                     │               「推論を記述する言語から作り直すべきでは？」
                      │
                      ▼
               ★ MRA — Molecular Reasoning Architecture（開発中）
@@ -195,6 +196,20 @@ Phase 6（大規模）· Phase 7（実リポジトリ）· Phase 8（人間評�
 
 ここで**言語処理系そのものを作る**という選択がなされます。ポートフォリオ最大の投資であり、
 **DBM v1 の3つの限界を解決するための、直接の帰結**です。
+
+答えとして選ばれたのが、**推論を状態遷移として記述させる**という言語形式でした。
+
+> *"The Semantic Language is **not** a knowledge representation language.
+> It is a **semantic reasoning state-transition language**."*
+> — `ReasonScript_Semantic_Language_Core_v0.2.md`
+
+`goal` → `derive` → `prove` → `apply` → `converge` → `rollback` の6プリミティブで
+推論を書かせることで、**各ステップに検証点が生まれ、失敗時の戻り先が定義されます。**
+`Proof` が `invalid` を含めば、直前の安全なチェックポイントへ自動ロールバックする——
+推論爆発でフリーズした経験に対する、言語レベルでの回答です。
+
+実装は **Hybrid DSL** 構成を取ります。**実行系を Python、ランタイムを Rust** が担い、
+Python 側のツールチェーンがネイティブ Rust 実行ファイルを呼び出します。
 
 | DBM v1 の限界 | ReasonScript / MRA での対応 |
 |---|---|

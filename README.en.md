@@ -35,7 +35,8 @@ Findings from an exploratory phase converged into a foundation (ReasonScript), o
                  ▼
   ■ Foundation ────────────────────────────────────────────────────
 
-   2026-04   ★ ReasonScript        Deterministic execution runtime (Apache-2.0)
+   2026-04   ★ ReasonScript        A state-transition language for reasoning (Apache-2.0)
+                 │                 Hybrid DSL: Python front end + Rust runtime
                  │                 Surface AST → … → ExecutionPlan
                  │
   ■ MRA ───────┴───────────────────────────────────────────────────
@@ -71,7 +72,7 @@ deterministic reasoning contract. `LanguageModel` pins the foundation to an exac
 
 | Project | Summary | Stack | Scale | License |
 |---|---|---|---|---|
-| **[ReasonScript](https://github.com/chigenori053/ReasonScript)** | A reasoning-first language guaranteeing deterministic execution and rollback safety at the specification level | Python / Rust / TS / Go / Java | ~135k LOC · 1,085 tests | Apache-2.0 |
+| **[ReasonScript](https://github.com/chigenori053/ReasonScript)** | A **state-transition language for describing reasoning**, guaranteeing deterministic execution and rollback safety at the specification level | **Hybrid DSL** — Python front end / Rust runtime | ~133.6k LOC · 1,085 tests | Apache-2.0 |
 
 ### MRA Domain Models
 
@@ -147,9 +148,9 @@ Roles:      Architect (human) / ResearchAgent / CodingAgent / ValidationAgent
 
 | Area | Technologies |
 |---|---|
-| **Language implementation** | Lexing/parsing, AST design, intermediate representation, execution planning, type specification, namespace resolution |
-| **Rust** | 60+ crate workspace, Safe-Rust runtime, Cargo, LSP server |
-| **Python** | Compiler & runtime implementation, symbolic computation via SymPy, pytest, uv |
+| **Language implementation** | Lexing/parsing, AST design, intermediate representation, execution planning, type specification, namespace resolution, **state-transition semantics** |
+| **Rust** | Language runtime implementation, 60+ crate workspace, Safe-Rust, Cargo, LSP server |
+| **Python** | Language front end & toolchain implementation, symbolic computation via SymPy, pytest, uv |
 | **Cross-language** | A single normative DTO contract shared across Rust / Python / TypeScript / Go / Java |
 | **Numerics** | Complex-valued tensors, Conv2d/MaxPool2d/AvgPool2d, reverse-mode autodiff |
 | **AI & reasoning** | HRR / VSA distributed representations, symbolic reasoning, causal inference, fuzzy decision, multimodal integration |

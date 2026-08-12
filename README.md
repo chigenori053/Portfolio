@@ -34,7 +34,8 @@
                  ▼
   ■ 基盤 ──────────────────────────────────────────────────────────
 
-   2026-04   ★ ReasonScript        決定論的実行処理系（Apache-2.0）
+   2026-04   ★ ReasonScript        推論を記述する状態遷移記述言語（Apache-2.0）
+                 │                 Hybrid DSL: Python 実行系 + Rust ランタイム
                  │                 Surface AST → … → ExecutionPlan
                  │
   ■ MRA ───────┴──────────────────────────────────────────────────
@@ -70,7 +71,7 @@
 
 | プロジェクト | 概要 | 主言語 | 規模 | ライセンス |
 |---|---|---|---|---|
-| **[ReasonScript](https://github.com/chigenori053/ReasonScript)** | 決定論的実行とロールバック安全性を言語仕様で保証する推論優先言語 [→ 詳細](docs/projects/reasonscript.md) | Python / Rust / TS / Go / Java | 約135,000行 · テスト1,085件 | Apache-2.0 |
+| **[ReasonScript](https://github.com/chigenori053/ReasonScript)** | **推論を記述するための状態遷移記述言語。**決定論的実行とロールバック安全性を言語仕様で保証する [→ 詳細](docs/projects/reasonscript.md) | **Hybrid DSL** — 実行系: Python / ランタイム: Rust | 約133,600行 · テスト1,085件 | Apache-2.0 |
 
 ### MRA ドメインモデル — Molecular Reasoning Architecture
 
@@ -143,9 +144,9 @@ Phase 0 → 1 → 2 → 3A → 3B-1 → 3B-2 → 3B-3 → 3C-1 と細かく刻�
 
 | 領域 | 技術 |
 |---|---|
-| **言語処理系** | 字句・構文解析、AST設計、中間表現(IR)、実行計画生成、型仕様、名前空間解決 |
-| **Rust** | 60+ crate のワークスペース設計、Safe-Rust ランタイム、Cargo、LSP サーバ |
-| **Python** | 処理系実装、SymPy による記号計算、pytest、uv |
+| **言語処理系** | 字句・構文解析、AST設計、中間表現(IR)、実行計画生成、型仕様、名前空間解決、**状態遷移意味論の設計** |
+| **Rust** | 言語ランタイム実装、60+ crate のワークスペース設計、Safe-Rust、Cargo、LSP サーバ |
+| **Python** | 言語実行系・ツールチェーン実装、SymPy による記号計算、pytest、uv |
 | **クロス言語** | Rust / Python / TypeScript / Go / Java の共通DTO契約 |
 | **数値計算** | 複素テンソル、Conv2d/MaxPool2d/AvgPool2d、リバースモード自動微分 |
 | **AI・推論** | HRR / VSA（分散表現）、記号推論、因果推論、ファジィ判定、マルチモーダル統合 |

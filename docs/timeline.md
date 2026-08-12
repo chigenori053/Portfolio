@@ -11,10 +11,11 @@
 ```
 2025-11 ────┬─── mathlang            「推論過程を記述できるか？」
             │
-            └─── COHERENT            「記憶と推論を分離できるか？」
+            └─── COHERENT            「Transformer 以外で LLM 同様の推論は可能か？」
+                     │               （推論モデル: BrainModel）
                      │
 2026-01 ─────────── Design_BrainModel v1
-                     │               「AIの生成を、設計から逸脱させずに済むか？」
+                     │               「設計意図からコードを想起できるか？」
                      │
 2026-04 ─────────── ★ ReasonScript    「そもそも言語処理系から作り直すべきでは？」
                      │
@@ -293,10 +294,10 @@ COHERENT で芽生え、VisionWorldModel で「観測 vs 推論」として実�
 ```
 mathlang（応用）
     ↓ 抽象化
-COHERENT（アーキテクチャ）
-    ↓ 抽象化
-Design_BrainModel（制御レイヤー）
-    ↓ 抽象化
+COHERENT / BrainModel（推論アーキテクチャの理論検証）
+    ↓ 実運用規模へ
+Design_BrainModel v1（コーディングエージェント）
+    ↓ 限界に直面し、さらに抽象化
 ReasonScript（基盤言語）        ← 最も深い層まで降りた
     ↓ 具体化
 VisionWorldModel / LanguageModel（応用）
@@ -310,7 +311,7 @@ VisionWorldModel / LanguageModel（応用）
 | プロジェクト | 分離しているもの |
 |---|---|
 | mathlang | 答え / 過程 |
-| COHERENT | 想起（System 1）/ 推論（System 2） |
+| COHERENT / BrainModel | 想起（System 1）/ 推論（System 2）、Accept / Review / Reject |
 | Design_BrainModel | 設計意図 / システム構造 / コード、提案する者 / 実装する者 |
 | ReasonScript | 構文 / 意味 / 中間表現 / 実行計画 |
 | VisionWorldModel | 観測 / 推論 |
@@ -354,8 +355,8 @@ Design_BrainModel v1 は、この構造の中では**先行実装**として位�
 | MRA | 開発中。Molecule / Evidence / Provenance と Truth Boundary を仕様として確立 |
 | VisionWorldModel | Phase 3C-1 まで検証完了。適応的構造推論に着手 |
 | LanguageModel | Phase 0 完了。Holographic Core 実装がこれから |
-| Design_BrainModel | v1 実装完了。ReasonScript + MRA Base による v2 再設計を予定 |
-| COHERENT | Phase 2（Coding Agent Integration）に向けて開発中 |
+| Design_BrainModel | **v1 は未完成プロダクト**（推論爆発は強引な抑制のみで安定の根拠がなく、記憶機構も期待した学習と容量効率に至らず）。ReasonScript + MRA Base による v2 再設計を予定 |
+| COHERENT | 理論検証を継続中。計算削減 80.0%（誤想起率 0%）· 数式の正誤判定 · 単語/多言語の想起 100% を実証。漢字生成 60〜80% が残課題（属性定義の重複が原因と特定済み） |
 | mathlang | 2025-11 で更新停止（後続プロジェクトに発想が継承済み） |
 
 ---

@@ -72,7 +72,7 @@ Molecule として表現する推論アーキテクチャ——を構築中で�
 | 数値計算 | 複素テンソル演算、Conv2d/MaxPool2d/AvgPool2d、リバースモード自動微分 |
 | テスト設計 | pytest / unittest、239テストファイル、Golden コーパス |
 | パッケージ管理 | uv、pyproject.toml、Python 3.12 |
-| 可視化UI | Streamlit（COHERENT Cognitive Simulator）、Jupyter |
+| 可視化UI | Streamlit（BrainModel v2.0 Cognitive Core Simulator）、Jupyter |
 
 ### クロス言語・システム設計
 
@@ -89,7 +89,7 @@ Molecule として表現する推論アーキテクチャ——を構築中で�
 | スキル | 根拠となる実装 |
 |---|---|
 | 分散表現（HRR / VSA） | LanguageModel の Binding / Superposition / Cleanup 設計 |
-| 連想記憶アーキテクチャ | COHERENT Optical Holographic Memory、Resonance Recall |
+| 連想記憶アーキテクチャ | COHERENT / BrainModel の HolographicMemory（Dynamic / Static / Causal の3層）、Resonance Recall、MemorySpace による想起優先実行 |
 | マルチモーダル統合 | テキスト・画像・音声の複素数テンソルへの統一符号化 |
 | 記号推論 | 知識レジストリ、ルール適用、証明エンジン |
 | 因果推論 | mathlang / COHERENT の `causal/` モジュール、誤り原因推定 |
@@ -143,7 +143,7 @@ Streamlit ダッシュボード · HTML レポート生成
 
 ### 2. Design_BrainModel — AIエージェント向け安全制御層
 
-**期間：** 2026年1月 〜（v1 実装完了 / **v2 再設計予定**）
+**期間：** 2026年1月 〜（**v1 は未完成プロダクト** / **v2 再設計予定**）
 **役割：** 設計・実装のすべて
 **規模：** Rust 約49,900行 / 60+ crate
 

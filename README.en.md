@@ -113,7 +113,8 @@ Associative (holographic) memory is a **semantic activation field**, not a store
 > — *MRA Holographic Semantic Language Model Specification v0.1, §2.1*
 
 "Semantically close" and "this relation holds" are strictly distinguished; any factual response must pass
-through canonical data and Evidence validation. The same split appears in COHERENT (recall → verify)
+through canonical data and Evidence validation. The same split appears in COHERENT / BrainModel
+(recall → verify, implemented as `Accept` / `Review` / `Reject` with a mandatory decision log)
 and VisionWorldModel (observation → inference).
 
 ### 3. Withholding judgment is a first-class output

@@ -111,7 +111,8 @@ Design_BrainModel ではハッシュアルゴリズム（FNV-1a 64bit）、シ�
 > — *MRA Holographic Semantic Language Model 仕様書 v0.1, §2.1 Truth Boundary*
 
 「意味的に近い」と「その関係が成立する」は厳密に区別され、事実応答は必ず正規データと Evidence 検証を通過します。
-この原則は COHERENT の想起→検証、VisionWorldModel の観測→推論の分離にも共通しています。
+この原則は COHERENT / BrainModel の想起→検証、VisionWorldModel の観測→推論の分離にも共通しています。
+COHERENT では `Accept` / `Review` / `Reject` の三値判定として実装され、判定には必ず根拠ログが伴います。
 
 ### 3. 判断しないことを、正当な出力にする
 

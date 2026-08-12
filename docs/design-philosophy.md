@@ -79,9 +79,15 @@ AIを安全性・監査・規制が関わる領域で使おうとするなら、
 そして「HolographicMemory の削除・再構築によって正規知識が失われてはならない」——
 連想記憶は捨てて作り直せるキャッシュとして位置づけられています。
 
-**COHERENT** では同じ構図が「Recall-First」として現れます。
-Optical Holographic Memory（System 1）が Resonance によって候補を想起し、
+**COHERENT**（推論モデル: **BrainModel**）では、同じ構図が「Recall-First」として現れます。
+HolographicMemory（System 1）が Resonance によって候補を想起し、
 ReasoningAgent と ValidationEngine（System 2）が検証して確定します。
+
+この分離は理念だけでなく**実装に直結しています。** `MemorySpace` は
+`AcceptStore` / `ReviewStore` / `RejectStore` の三領域を持ち、
+判定結果には必ず根拠ログ（`DecisionLog`）が添えられます。
+そして「記憶があれば想起し、なければ初めて推論する」運用により、
+**誤想起率 0% を保ったまま計算量を 80.0% 削減**したことが定量的に記録されています。
 
 **VisionWorldModel** では対象が視覚に変わります。
 **観測された VisualAtom** と **推論された World 構成要素** が分離して保持されます。
@@ -89,7 +95,7 @@ ReasoningAgent と ValidationEngine（System 2）が検証して確定します�
 | プロジェクト | 候補を出す側 | 確定する側 |
 |---|---|---|
 | LanguageModel | HolographicMemory | Molecular Memory + Evidence 検証 |
-| COHERENT | Optical Holographic Store | ReasoningAgent + ValidationEngine |
+| COHERENT / BrainModel | HolographicMemory（Dynamic / Static / Causal） | ReasoningAgent + ValidationEngine（Accept / Review / Reject） |
 | VisionWorldModel | 観測（VisualAtom） | 推論（World components）+ Decision |
 | Design_BrainModel v2 | システム構造から**想起**されたコード | 設計意図とその検証 |
 
@@ -259,7 +265,7 @@ AIエージェントの能力が上がるほど、ボトルネックは「生成
 
 出発点は **「AIの出力を、人間が事後に検査・再現・巻き戻しできるようにする」** という一点です。
 そこから、言語処理系（ReasonScript）、制御レイヤー（Design_BrainModel）、
-記憶アーキテクチャ（COHERENT / LanguageModel）、世界モデル（VisionWorldModel）が
+記憶アーキテクチャ（COHERENT / BrainModel、LanguageModel）、世界モデル（VisionWorldModel）が
 それぞれの角度で導かれています。
 
 ---

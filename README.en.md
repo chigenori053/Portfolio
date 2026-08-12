@@ -90,7 +90,7 @@ Predecessor projects that led to ReasonScript and MRA.
 | Project | Summary | Stack | Scale | Status |
 |---|---|---|---|---|
 | **[COHERENT](https://github.com/chigenori053/COHERENT)** | A **theory-validation project** (reasoning model: **BrainModel**) testing whether reasoning can hold without Transformers, via simulated optical interference and memory reuse | Python | ~43k LOC | Validation ongoing |
-| **[mathlang](https://github.com/chigenori053/mathlang)** | A DSL that captures, replays, and verifies the *process* of mathematical reasoning | Python | ~9.2k LOC | Archived |
+| **[mathlang](https://github.com/chigenori053/mathlang)** | A Python-based math-learning DSL for learners from junior high school onward. It normalizes human-friendly notation and uses SymPy to verify mathematical equivalence and correctness | Python | ~9.2k LOC | Archived |
 
 Detailed write-ups are in Japanese under [`docs/projects/`](docs/projects/).
 

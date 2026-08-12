@@ -89,7 +89,7 @@ MRA と ReasonScript に至る過程で構築した、先行プロジェクト�
 | プロジェクト | 概要 | 主言語 | 規模 | 状態 |
 |---|---|---|---|---|
 | **[COHERENT](https://github.com/chigenori053/COHERENT)** | **理論検証プロジェクト**（推論モデル名 **BrainModel**）。Transformer に依らない推論の成立可能性を、光学干渉のシミュレーションと記憶再利用によって検証 [→ 詳細](docs/projects/coherent.md) | Python | 約43,000行 | 検証継続中 |
-| **[mathlang](https://github.com/chigenori053/mathlang)** | 数学的思考の過程そのものを記述・再生・検証するDSL [→ 詳細](docs/projects/mathlang.md) | Python | 約9,200行 | 更新停止 |
+| **[mathlang](https://github.com/chigenori053/mathlang)** | 中学生以上の数学・プログラミング学習を支援する、Python ベースの数学学習DSL。人間向け数式を正規化し、SymPy で等価性と正誤を検証 [→ 詳細](docs/projects/mathlang.md) | Python | 約9,200行 | 更新停止 |
 
 ---
 

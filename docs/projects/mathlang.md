@@ -1,7 +1,7 @@
 # MathLang
 
-> **Mathematical Thinking Language** — 数学的思考の「過程」そのものを記述し、
-> 学習者とAIの双方が検査・再生・改善できるようにするDSLとツール群。
+> **Mathematical Thinking Language** — 中学生以上の学習者を対象に、数学と
+> プログラミングの学習を支援する Python ベースのDSLとツール群。
 
 | | |
 |---|---|
@@ -9,20 +9,28 @@
 | **開始** | 2025-11 |
 | **主要言語** | Python 3.12（実装 約9,200行）· Jupyter Notebook |
 | **規模** | `core/` に23モジュール · テスト30ファイル · ドキュメント29本 |
-| **位置づけ** | 系譜の起点。「推論過程を第一級のデータにする」という発想の出発点 |
+| **位置づけ** | 数学学習支援を出発点とし、「推論過程を第一級のデータにする」という発想を検証した初期プロダクト |
 
 ---
 
 ## コンセプト
 
-答えではなく、**答えに至る過程**を書く言語です。
+人間が普段使う数式を入力し、数式の正誤と変形過程を確認できる
+**数学学習支援言語**です。答えだけでなく、**答えに至る過程**も記述します。
 
 - **Process-first** — 最終解答よりも、途中の作業ステップを重視する
-- **AI-assisted** — 人間の推論と SymbolicAI（SymPy）を組み合わせ、式の説明と変換を行う
+- **Python-based DSL** — Python の実行環境を活用しつつ、学習者向けの `.mlang` 記法を提供する
+- **Human-friendly input** — `x^2`、`2xy`、`√x`、隣接する括弧などを、内部の Python/SymPy 互換表記へ正規化する
+- **AI-assisted** — 人間の推論と SymbolicAI（SymPy）を組み合わせ、式の説明・簡約・等価性判定を行う
 - **Reproducible** — 同一入力からは常に同一の実行トレースが再生される
 - **Lightweight** — Python 3.12 のモジュール構成。教育と研究の両方に使える
 
 「なぜその変形をしたのか」が消えてしまう、という数学教育の課題に対する、言語設計からの回答です。
+
+`ValidationEngine` は、入力式をパースしたうえで `symbolic_equiv`、`exact_form`、
+`canonical_form` の各モードで正誤を返します。たとえば同じ正解に対して
+`4 + 2*x`、`2*(x + 2)`、`x + x + 4` のような**複数の等価な回答形式を受理**できます。
+これは回答を自動生成する機能ではなく、学習者の異なる正しい表現を数学的に判定する機能です。
 
 ---
 
@@ -93,10 +101,12 @@ End: 32
 | レイヤー | 主要モジュール | 役割 |
 |---|---|---|
 | **DSL Core** | `core/parser.py` `core/ast_nodes.py` | MathLang 構文を AST に解析 |
+| **Input Parser** | `core/input_parser.py` | 人間向け数式を Python/SymPy 互換の内部表記へ正規化 |
 | **Execution** | `core/evaluator.py` | 推論ステップを再生し、注釈付き出力を生成 |
 | **Polynomial** | `core/polynomial.py` `core/polynomial_evaluator.py` | 代数法則による多変数多項式の評価 |
 | **Optimization** | `core/optimizer.py` | 代入のインライン化と定数畳み込みによるトレース整理 |
 | **SymbolicAI** | `core/symbolic_engine.py` | SymPy と独自ロジックによる式の簡約と説明生成 |
+| **Validation** | `core/validation_engine.py` `core/computation_engine.py` | 数学的同値・正確な形式・正規形を判定し、正誤フィードバックを返す |
 | **Knowledge** | `core/knowledge_registry.py` `core/knowledge/` | 適用ルールの知識ベース |
 | **Causal** | `core/causal/` | 誤りの原因推定 |
 | **Fuzzy** | `core/fuzzy/` | ファジィ判定 |

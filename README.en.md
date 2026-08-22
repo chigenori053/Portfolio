@@ -14,10 +14,28 @@ At the center is **ReasonScript**, a programming language built from scratch, wi
 
 ## Project Lineage
 
-Findings from an exploratory phase converged into a foundation (ReasonScript), on top of which
+A concept formed during an early research phase became an exploratory implementation; findings
+from that phase converged into a foundation (ReasonScript), on top of which
 **MRA — Molecular Reasoning Architecture** is now being built.
 
 ```
+  ■ Research ──────────────────────────────────────────────────────
+
+   2025-01   Considered adding a math course at the programming school I run
+                 │                 Idea: use an LLM as a learning coach
+                 │                 → Consulted an education expert. Feedback: "too hard"
+                 │                   (LLMs of the time were unreliable at math, unstable output)
+                 │
+                 │  Learned of SymbolicAI
+                 │  ▼
+                 │  Learned of Wolfram Alpha (an existing education-domain service), tested it
+                 │  → Found it could not evaluate an input expression step by step,
+                 │    including intermediate calculations
+                 ▼
+             Arrived at the MathLang concept:
+             "a dedicated educational language that understands and evaluates
+              expressions including their intermediate steps"
+
   ■ Exploration ───────────────────────────────────────────────────
 
    2025-11   mathlang              A math-learning support language (Python DSL)
@@ -56,6 +74,20 @@ Findings from an exploratory phase converged into a foundation (ReasonScript), o
   ACCEPT/REVISE/    vs canonical         recall
   DEFER/ABSTAIN     knowledge
 ```
+
+### Why the research phase isn't on GitHub
+
+The months from January 2025 were spent mostly on defining requirements and consulting experts,
+not writing code. While considering a new math course at the programming school I run, I got
+the idea of using an LLM as a learning coach — but an education expert I consulted said it would
+be "too hard," citing the unreliability of contemporaneous LLMs at math. I then learned of
+SymbolicAI, and afterward of Wolfram Alpha as an existing education-domain service; testing it
+showed it could not evaluate an input expression step by step, including intermediate
+calculations. That gap led directly to the MathLang concept: a dedicated educational language
+that understands and evaluates expressions including their intermediate steps. There was no
+repository to keep from this period — it produced a concept, not code — so it leaves no trace
+on GitHub. **mathlang, the starting point of the exploration phase, is that conclusion put
+directly into implementation.**
 
 **One foundation supporting three distinct application domains** — vision, language, and software
 design. A foundation with a single application only ever demonstrates that application; three

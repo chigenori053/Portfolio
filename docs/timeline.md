@@ -395,6 +395,7 @@ Design_BrainModel v1 は、この構造の中では**先行実装**として位�
 | プロジェクト | 状態 |
 |---|---|
 | ReasonScript | v0.5.4.5 リリース済み（Apache-2.0）。ReasonGraph/World ビューア、パッケージレジストリ、SDK公開APIマニフェストが未実装 |
+| Transformer_Test（外部検証） | RS-DT-JP-GREET-001。決定論・観測非干渉を実測確認、基盤の型検査バグ3件を発見・修正。Model A〜D の構造的優位性を検証する本実験（Phase 7〜9）は性能制約により一時中断 |
 | MRA | 開発中。Molecule / Evidence / Provenance と Truth Boundary を仕様として確立 |
 | VisionWorldModel | Phase 3C-1 まで検証完了。適応的構造推論に着手 |
 | LanguageModel | Phase 0 完了。Holographic Core 実装がこれから |

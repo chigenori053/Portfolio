@@ -94,6 +94,15 @@
 |---|---|---|---|---|
 | **[ReasonScript](https://github.com/chigenori053/ReasonScript)** | **推論を記述するための状態遷移記述言語。**決定論的実行とロールバック安全性を言語仕様で保証する [→ 詳細](docs/projects/reasonscript.md) | **Hybrid DSL** — 実行系: Python / ランタイム: Rust | 約133,600行 · **CI 1,116件パス（実行確認済み）** | Apache-2.0 |
 
+#### 外部検証 — External Verification
+
+ReasonScript 単体の CI とは別に、外部プロジェクトで基盤仕様（決定論・観測可能性・独立検証可能性）が
+現実的なワークロードでも成立するかを検証しています。
+
+| プロジェクト | 検証内容 | 結果 | 状態 |
+|---|---|---|---|
+| **[Transformer_Test](https://github.com/chigenori053/Transformer_Test)**（RS-DT-JP-GREET-001） | `.rsn` のみで実装した Transformer による日本語挨拶8クラス分類。決定論・観測非干渉・独立検証（Rust）を検証 [→ 詳細](docs/projects/transformer-test.md) | **決定論成立**（チェックポイント SHA-256 完全一致）・**観測が計算に非干渉**なことを実測確認。基盤の型検査バグ3件を発見・修正。Model A〜D の構造的優位性そのものは**未検証** | Phase 0〜6 実装済み / Phase 7〜9（本実験）は性能制約により一時中断 |
+
 ### MRA ドメインモデル — Molecular Reasoning Architecture
 
 開発中の推論アーキテクチャ MRA を構成する、ドメイン別のモデル群です。
@@ -182,6 +191,7 @@ Phase 0 → 1 → 2 → 3A → 3B-1 → 3B-2 → 3B-3 → 3C-1 と細かく刻�
 - **[開発年表](docs/timeline.md)** — 2025-11 から現在までの流れと、各段階での問題意識の変化
 - **[技術経歴書](docs/technical-profile.md)** — スキルセットと成果を職務経歴書形式で整理
 - **プロジェクト詳細** — [ReasonScript](docs/projects/reasonscript.md) ·
+  [Transformer_Test（外部検証）](docs/projects/transformer-test.md) ·
   [Design_BrainModel](docs/projects/design-brainmodel.md) ·
   [COHERENT](docs/projects/coherent.md) ·
   [mathlang](docs/projects/mathlang.md) ·
@@ -195,6 +205,7 @@ Phase 0 → 1 → 2 → 3A → 3B-1 → 3B-2 → 3B-3 → 3C-1 と細かく刻�
 | | 状態 |
 |---|---|
 | **ReasonScript** | v0.5.4.5 リリース済み。**`./reason ci` を実行し、全ステージ PASS / 1,116件のテスト通過を確認**（2026-08-12、commit `0efb2ab`、Python 3.14.0）。ReasonGraph/World ビューア、パッケージレジストリ、SDK公開APIマニフェストが未実装 |
+| **Transformer_Test（外部検証）** | RS-DT-JP-GREET-001。決定論（チェックポイント SHA-256 完全一致）・観測非干渉を実測確認、基盤の型検査バグ3件を発見・修正。Model A〜D の構造的優位性の検証（本実験 Phase 7〜9）は性能制約により一時中断 |
 | **MRA** | 開発中。Molecule / Evidence / Provenance のデータモデルと Truth Boundary を仕様として確立した段階 |
 | **VisionWorldModel** | Phase 3C-1 まで検証完了。適応的構造推論に着手 |
 | **LanguageModel** | Phase 0（基盤固定・仕様策定）完了。Holographic Core 実装がこれから |

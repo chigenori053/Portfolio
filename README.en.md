@@ -74,6 +74,15 @@ deterministic reasoning contract. `LanguageModel` pins the foundation to an exac
 |---|---|---|---|---|
 | **[ReasonScript](https://github.com/chigenori053/ReasonScript)** | A **state-transition language for describing reasoning**, guaranteeing deterministic execution and rollback safety at the specification level | **Hybrid DSL** — Python front end / Rust runtime | ~133.6k LOC · **1,116 CI tests, verified by running them** | Apache-2.0 |
 
+#### External Verification
+
+Beyond ReasonScript's own CI, a separate project tests whether its core guarantees — determinism,
+non-interfering observation, and independent verifiability — hold up under a realistic workload.
+
+| Project | What it tests | Result | Status |
+|---|---|---|---|
+| **[Transformer_Test](https://github.com/chigenori053/Transformer_Test)** (RS-DT-JP-GREET-001) | A Transformer implemented entirely in `.rsn`, trained on an 8-class Japanese greeting classification task. Tests determinism, observation non-interference, and independent (Rust) verification | **Determinism holds** (bit-identical checkpoint SHA-256 across runs); **observation does not affect computation**, both measured directly. Found and fixed 3 type-checker bugs in the foundation. The structural advantage of Models A–D themselves remains **unverified** | Phases 0–6 implemented and measured; Phases 7–9 (the full ablation experiment) are paused on a performance constraint |
+
 ### MRA Domain Models
 
 Domain-specific models composing MRA, the reasoning architecture currently under development.
@@ -164,6 +173,7 @@ Roles:      Architect (human) / ResearchAgent / CodingAgent / ValidationAgent
 | | State |
 |---|---|
 | **ReasonScript** | v0.5.4.5 released. **`./reason ci` was executed for this portfolio: all stages PASS, 1,116 tests** (2026-08-12, commit `0efb2ab`, Python 3.14.0). ReasonGraph/World viewers, package registry, and the SDK public API manifest remain open |
+| **Transformer_Test (external verification)** | RS-DT-JP-GREET-001. Measured: determinism (bit-identical checkpoint SHA-256) and observation non-interference; found and fixed 3 type-checker bugs in the foundation. Verifying the structural advantage of Models A–D (Phases 7–9) is paused on a performance constraint |
 | **MRA** | In development. The Molecule / Evidence / Provenance data model and the Truth Boundary are established as specification |
 | **VisionWorldModel** | Validated through Phase 3C-1; adaptive structural reasoning underway |
 | **LanguageModel** | Phase 0 (foundation pinning, specification) complete; Holographic Core implementation next |

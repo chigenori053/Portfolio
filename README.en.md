@@ -72,7 +72,7 @@ deterministic reasoning contract. `LanguageModel` pins the foundation to an exac
 
 | Project | Summary | Stack | Scale | License |
 |---|---|---|---|---|
-| **[ReasonScript](https://github.com/chigenori053/ReasonScript)** | A **state-transition language for describing reasoning**, guaranteeing deterministic execution and rollback safety at the specification level | **Hybrid DSL** — Python front end / Rust runtime | ~133.6k LOC · **1,116 CI tests, verified by running them** | Apache-2.0 |
+| **[ReasonScript](https://github.com/chigenori053/ReasonScript)** | A **state-transition language for describing reasoning**, guaranteeing deterministic execution and rollback safety at the specification level | **Hybrid DSL** — Python compiler / Rust runtime (single native host) | ~154.3k LOC · **1,240 CI tests, verified by running them** | Apache-2.0 |
 
 ### MRA Domain Models
 
@@ -163,7 +163,7 @@ Roles:      Architect (human) / ResearchAgent / CodingAgent / ValidationAgent
 
 | | State |
 |---|---|
-| **ReasonScript** | v0.5.4.5 released. **`./reason ci` was executed for this portfolio: all stages PASS, 1,116 tests** (2026-08-12, commit `0efb2ab`, Python 3.14.0). ReasonGraph/World viewers, package registry, and the SDK public API manifest remain open |
+| **ReasonScript** | v0.5.5.8 released. Retired the Python production execution fallback; execution now runs on a single Rust runtime host. **`./reason ci` was executed for this portfolio: all stages PASS, 1,240 tests** (2026-08-31, commit `edfd477`, Python 3.14.0). ReasonGraph/World viewers, package registry, and the SDK public API manifest remain open |
 | **MRA** | In development. The Molecule / Evidence / Provenance data model and the Truth Boundary are established as specification |
 | **VisionWorldModel** | Validated through Phase 3C-1; adaptive structural reasoning underway |
 | **LanguageModel** | Phase 0 (foundation pinning, specification) complete; Holographic Core implementation next |

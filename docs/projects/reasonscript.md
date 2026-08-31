@@ -1,16 +1,16 @@
 # ReasonScript
 
 > **推論を記述するための、状態遷移記述言語。**
-> Python を実行系、Rust をランタイムとする **Hybrid DSL**。
+> Python をコンパイラ/ツールチェーン、Rust を単一の実行ランタイムとする **Hybrid DSL**。
 
 | | |
 |---|---|
 | **リポジトリ** | https://github.com/chigenori053/ReasonScript |
 | **開始** | 2026-04 |
-| **現在バージョン** | v0.5.4.5（2026-08-07） |
+| **現在バージョン** | v0.5.5.8（2026-08-30） |
 | **言語種別** | **状態遷移記述言語（semantic reasoning state-transition language）** |
-| **実装形態** | **Hybrid DSL** — 実行系: Python / ランタイム: Rust |
-| **規模** | 実装約133,600行 · Python 543ファイル 82,244行 · Rust 197ファイル 45,134行 · テスト239ファイル / **CI 1,116件パス（実行확認済み）** · 仕様書77本を含むドキュメント271本 |
+| **実装形態** | **Hybrid DSL** — コンパイラ/ツールチェーン: Python / 実行ランタイム: Rust（単一のネイティブ実行ホスト） |
+| **規模** | 実装約154,300行 · Python 637ファイル 98,518行 · Rust 215ファイル 55,826行 · テスト関連ファイル455件 / **CI 1,240件パス（実行確認済み）** · 仕様書102本を含むドキュメント356本 |
 | **ライセンス** | Apache-2.0 |
 | **位置づけ** | ポートフォリオ全体の**基盤**。MRA の3ドメインモデルが依存 |
 
@@ -135,6 +135,11 @@ ReasonScript は、これらを**ライブラリやプロンプト技法では�
 **同一入力からは、必ず同一の ExecutionPlan と InferenceResult が生成されます。**
 Reason IR は `schemas/reason_ir.schema.json` によって機械的に検証されます。
 
+推論プリミティブ（`goal`/`derive`/…）以外の通常の関数・`calculation`ブロックは、
+これとは別に **Computation IR**（`reason-computation-ir`）という中間表現へ Python 側で lowering され、
+Rust ランタイムホストが直接実行します。両方の中間表現を Python がコンパイルし、
+実行そのものは後述のとおり Rust 側に一本化されています。
+
 ### 推論アーティファクト（Reasoning Artifacts）
 
 「どうやってその結果に到達したか」を、バージョン付きの検査可能な記録として残します。
@@ -148,7 +153,8 @@ Reason IR は `schemas/reason_ir.schema.json` によって機械的に検証さ�
 ### ReasonUnit Object（RUO）
 
 推論単位を可搬・正規な形式で表現するオブジェクトフォーマット。ネイティブなランタイム型、CLI統合、
-レガシー形式からの移行パスを備えています。
+レガシー形式からの移行パスを備えています。v0.5.5系で、`ruo.*` の16関数すべてが
+**Rustネイティブ**（`reason-object-core`）で実行されるようになりました。
 
 ### クロス言語DTO契約
 
@@ -159,34 +165,46 @@ Reason IR は `schemas/reason_ir.schema.json` によって機械的に検証さ�
 実務的な課題に対する解になっています。
 
 なお **Go と Java は DTO バインディングのみ**（それぞれ数百行）であり、
-処理系の実装言語ではありません。実装は次節の Hybrid 構成に集約されています。
+処理系の実装言語ではありません。
 
 ---
 
-## Hybrid DSL — Python 実行系 + Rust ランタイム
+## Hybrid DSL — Python コンパイラ/ツールチェーン + Rust 単一実行ランタイム
 
-ReasonScript は単一言語で実装された処理系ではありません。
-**実行系を Python、ランタイムを Rust が担う Hybrid 構成**を取っています。
+ReasonScript は単一言語で実装された処理系ではありません。ただし**役割分担は v0.5.4系から大きく変わりました。**
+v0.5.4.5 時点では「実行系は Python、ランタイムは Rust」という説明が成立していましたが、
+2026-08-24〜08-30 にかけて完了した **Runtime Rust Consolidation Plan（Phase 0〜9）** により、
+**Python は本番実行から退役し、実行そのものは Rust ランタイムホストに一本化されました。**
 
-| 層 | 言語 | 担当 | 規模 |
+| 層 | 言語 | 担当 | 現在の位置づけ |
 |---|---|---|---|
-| **実行系 / ツールチェーン** | **Python** | コンパイルパイプライン、`reason` CLI、検証、CI、アーティファクト管理、SDK、Conformance | 543ファイル / 82,244行 |
-| **ランタイム** | **Rust** | 実行エンジン、Reason IR 検証、トランザクション、テンソル演算、可視化 | 197ファイル / 45,134行 |
-| **DTO バインディング** | TypeScript / Go / Java | 型定義の共有のみ | 計 約6,200行 |
+| **コンパイラフロントエンド / ツールチェーン** | **Python** | パーサ・バリデータ・意味解析、Reason IR / Computation IR への lowering、`reason` CLI、CI、アーティファクト管理、SDK、Conformance | 現役。**唯一のフロントエンド** |
+| **実行ランタイム** | **Rust** | `reason-runtime-host`（`ReasonRuntime/` ワークスペース）が Computation IR VM・Tensor演算・RUO・Vision・Reasoning core を実行 | 現役。**唯一の本番実行パス** |
+| Python 実行系（AST evaluator, Computation IR interpreter, Tensor/RUO/Vision runtime） | Python | 差分テスト・ベンチマークの参照実装 | **参照専用に降格。** standalone実行・project実行・project検証・Tensorアーティファクトコマンド・マニフェスト生成からの import は禁止 |
+| **DTO バインディング** | TypeScript / Go / Java | 型定義の共有のみ | 現役 |
 
-Python 側（`toolchain/native_runtime.py`）が、配布物に同梱された
-ネイティブ Rust 実行ファイル（`reasonunit-runtime-native`）を解決して呼び出す構造です。
+### なぜ変わったのか
 
-### この分担の理由
+`docs/development/python_reference_runtime.md` は、この方針を明確に定めています。
 
-- **Python** — 言語処理系の反復開発、検証ロジック、ツールチェーン、CI との親和性
-- **Rust** — 実行時の安全性と決定性。特に `VisualizationRuntime` は **Safe-Rust** で実装され、
-  意味構造の可視化が実行時に壊れないことを型で保証している
+> *"Product execution uses `reason-runtime-host`; a missing host, unsupported lowering,
+> capability denial, bridge failure, or native runtime error is returned as a structured
+> diagnostic without executing Python."*
+
+Python 評価器は差分テストとベンチマークからのみ import が許され、参照実装としての価値
+（差分オラクル）がネイティブの golden vector や独立した仕様ハーネスに置き換わり次第、
+削除される予定です（Phase 9 deletion gate、現時点では未削除）。
+
+`HybridRuntime/` `RuntimeReal/` といった旧ディレクトリは、差分テストと SDK/DTO 互換性テストが
+依存しているため現時点でも残っていますが、**本番実行パスからは外れています**。
+Rust 側で重複していた `ReasonComputationRuntime` `NativeReasonUnitRuntime` `VisionRuntime`
+ディレクトリと、未参照になった `Legacy/runtime`・`RuntimeComplex` プレースホルダは削除され、
+`ReasonRuntime/`（`computation-ir` `tensor-core` `reason-object-core` `reasoning-core`
+`vision-core` `runtime-cli` の6クレート）に統合されています。
 
 `Legacy/elixir_runtime/` に Elixir 実装が残っていますが、これは
-**開発初期に分散ランタイムとして導入を計画していたもの**です。
-その後の設計収束によって不要となり、現行の構成からは外れています
-（`Legacy/` 配下にのみ存在し、実装本体には含まれません）。
+**開発初期に分散ランタイムとして導入を計画していたもの**で、その後の設計収束によって
+不要となり、現行の構成からは外れています（`Legacy/` 配下にのみ存在）。
 
 ---
 
@@ -208,21 +226,38 @@ module Basic {
 
 `calculation` ブロックが特徴的で、通常の関数とは別に「計算・推論の単位」を言語構文として持ちます。
 
+v0.5.5.8 で言語化された代数的 Enum / Optional / パターンマッチングは、こう書きます。
+
+```reasonscript
+module OptionalMatch {
+    fn Score(value: optional<int>) -> int {
+        match value {
+            some(x) => return x
+            none => return 0
+        }
+    }
+
+    calculation Answer {
+        result = Score(some(42))
+    }
+}
+```
+
 ---
 
 ## ランタイム構成
 
-単一のランタイムではなく、目的別に複数のランタイムを持つ構成です。
+Rust ランタイム統合の完了により、**本番実行は `reason-runtime-host` 1つに一本化**されています。
+以前の「目的別に複数のランタイムを持つ」構成のうち、Python 側とレガシー Rust ワークスペースは
+差分テスト用の参照実装としてのみ残っています。
 
-| ランタイム | 役割 |
-|---|---|
-| `RuntimeReal` | 標準の実行ランタイム |
-| `HybridRuntime` | Rust実装のハイブリッドランタイム。Reason IR バリデータを含む |
-| `NativeReasonUnitRuntime` | ReasonUnit のネイティブ実行 |
-| `ClusterRuntime` | Dynamic ReasonUnit クラスタ実行 |
-| `VisionRuntime` | 視覚処理向けランタイム |
-| `VisualizationRuntime` | Safe-Rust による意味構造の可視化ランタイム |
-| `RuntimeComplex` | 複素数演算ランタイム |
+| ランタイム | 言語 | 現在の役割 |
+|---|---|---|
+| `reason-runtime-host`（`ReasonRuntime/crates/runtime-cli`） | Rust | **唯一の本番実行ホスト**。Computation IR VM・Tensor・RUO・Vision・Reasoning core をすべて実行 |
+| `computation-ir` / `tensor-core` / `reason-object-core` / `reasoning-core` / `vision-core` | Rust | `reason-runtime-host` が呼び出すライブラリクレート |
+| `RuntimeReal` / `HybridRuntime` | Python / Rust | 差分テスト・SDK/DTO互換性テスト専用の参照実装。**本番実行では使用されない** |
+| `ClusterRuntime` | Rust | Dynamic ReasonUnit クラスタ実行 |
+| `VisualizationRuntime` | Safe-Rust | 意味構造の可視化ランタイム。型で「実行時に壊れないこと」を保証 |
 
 ---
 
@@ -231,6 +266,10 @@ module Basic {
 言語単体ではなく、開発体験まで含めて構築されています。
 
 - **`reason` CLI** — ビルド、実行、検証、CI、アーティファクト管理
+- **`reason test`** — v0.5.5.8 で**実行ベースに刷新**。以前は静的なコンパイル・検証のみで
+  実行時ロジックの失敗を `PASS` と誤報告しうる問題があったが、`assert` / `assert_eq` を
+  Rust ホスト / Computation IR VM 上で実際に実行し、`COMPILE_ERROR` / `ASSERTION_FAILURE` /
+  `RUNTIME_ERROR` を区別して報告する
 - **`reason view`** — ターミナル上の CodeViewer。`.rsn` ソースと、そこから生成された
   Surface AST / Semantic AST / Reason IR / ExecutionPlan を**対応付けて表示**する
   （curses製の対話UI、`--json` / `--plain` 出力、ファイルツリーブラウザ付き）
@@ -246,10 +285,16 @@ module Basic {
 ./reason ci --json
 ```
 
-チェックアウト → ワークスペース検証 → 診断 → アーティファクト → Golden コーパス →
-エージェントプロトコル → DTO互換性 → テストスイート、を一気通貫で実行します。
-README は v0.5.4.5 時点で 1,085件と記載していますが、**本ポートフォリオの作成時に実際に実行したところ、
-全ステージ PASS・1,116件のテスト通過を確認しました**（2026-08-12 / commit `0efb2ab` / Python 3.14.0）。
+チェックアウト → 環境検証（バージョン一貫性） → ワークスペース検証 → 診断 → アーティファクト →
+Golden コーパス → エージェントプロトコル → DTO互換性 → テストスイート、を9ステージで一気通貫実行します。
+**本ポートフォリオの更新にあたり実際に実行したところ、全9ステージ PASS・1,240件のテスト通過を確認しました**
+（2026-08-31 / commit `edfd477` / Python 3.14.0）。
+
+ソースからビルドする場合は、先に Rust ランタイムホストのビルドが必要です。
+
+```bash
+cargo build --manifest-path ReasonRuntime/Cargo.toml --bin reason-runtime-host
+```
 
 ### Conformance フレームワーク
 
@@ -261,27 +306,45 @@ python3 conformance/run_conformance.py
 
 ---
 
-## v0.5.4.5 の主な内容
+## v0.5.4.5 → v0.5.5.8 の主な変化
 
-**追加**
-- **Tensor Training Foundation v0.2** — NCHW形式の Conv2d / MaxPool2d / AvgPool2d、
-  **リバースモード自動微分**、slice/gather、ステートレスなシード付き乱数テンソル生成、
-  境界のある autograd ライフサイクル管理
-- **`.rstensor` ファイルプロファイル** — チェックサム検証付き。capability チェックを伴う
-  `tensor.load` / `tensor.save`、および JSON / CSV / NumPy 入力に対応した
-  `reason tensor import|inspect|verify` コマンド
+2026-08-12（v0.5.4.6）から 2026-08-30（v0.5.5.8）にかけて、アーキテクチャと言語機能の両方に
+大きな変更が入りました。
 
-**修正**
-- 到達不能になったテンソル値をランタイム環境から解放し、反復的なテンソルプログラムが
-  「1,000 live value」ポリシーを使い切る問題を解消
-- ループのトレーススナップショットを、全要素を暗黙的に実体化せずメタデータのシリアライズに変更して有界化
-- 数値リテラルの10進指数表記を受理
+### アーキテクチャ: Rust ランタイム統合（Runtime Rust Consolidation Plan, Phase 0–9）
+
+- **Phase 6–7**：推論4関数（`runtime.search` / `simulate` / `predict` / `plan`）を Rust の
+  in-process reasoning core に接続し、**Python 実行系の本番フォールバックを撤廃**
+- **Phase 8**：Rust ワークスペースを `ReasonRuntime/` に統合。重複していた
+  `ReasonComputationRuntime` `NativeReasonUnitRuntime` `VisionRuntime` ディレクトリと
+  重複 Cargo lockfile を削除
+- **Phase 9**：未参照になった `Legacy/runtime` と `RuntimeComplex` プレースホルダを削除
+
+### 言語機能: Modernization Phases 0–5（v0.5.5.8）
+
+- **Phase 0** 実行可能チェック契約 — CLI/ツールチェーン全体で構造化チェック契約を強制
+- **Phase 1** 列挙型・Optional・パターンマッチング統合 — 代数的 Enum / Optional と
+  網羅的/ワイルドカード `match` のネイティブランタイムサポート
+- **Phase 2** 文字列・コレクション標準ライブラリ — `string.*` とコレクション操作関数
+- **Phase 3** 実行ベーステストフレームワーク — 上述の `reason test` 刷新
+- **Phase 4** 制御された再帰 — コールグラフ循環解析と `max_call_depth`（既定128）による
+  スタックガード、`RT-CALL-003` 診断
+- **Phase 5** モジュール・マニフェスト・ReasonGraph 整合性 — Rust ネイティブの
+  `GraphTransaction` が Python 版と完全同等の操作集合（`unit_additions` 等）をサポート
+
+### v0.5.5.3〜v0.5.5.6 で追加された計算機能
+
+- `optimizer.*`（SGD / Momentum / Adam / AdamW）、`relation.*`（関係代数のフィルタ/ソート/distinct）
+  の各 namespace
+- Computation IR のオプティマイザ（定数畳み込み・デッドコード除去・局所CSE）
+- Rust ネイティブの Autograd（テープ + VJP）、`NumericMode::NativeFast`
+  （rayon並列化。700×700行列積で実測1.42倍の高速化、シーケンシャル実装とのビット完全一致を保証）
 
 ---
 
 ## 仕様書群
 
-`docs/specifications/` に40本以上の仕様書があります。主要なもの：
+`docs/specifications/` に102本の仕様書があります。主要なもの：
 
 | 仕様書 | 内容 |
 |---|---|
@@ -293,6 +356,9 @@ python3 conformance/run_conformance.py
 | `ReasonScript_ABI_Specification_v0.1.md` | ABI仕様 |
 | `ReasonScript_Agent_Development_Protocol_v1_0.md` | エージェント開発プロトコル |
 | `Conformance_Framework_Specification_v0.1.md` | 適合性検証フレームワーク |
+| `ReasonScript_Execution_Based_Test_Framework_v0_1.md` | 実行ベーステスト仕様（Phase 3） |
+| `ReasonScript_Controlled_Recursion_Phase4_v0_1.md` | 制御された再帰仕様（Phase 4） |
+| `docs/development/runtime_rust_consolidation_plan.md` | Rust ランタイム統合計画（Phase 0–9、`COMPLETED`） |
 | `KEV-1_Knowledge_Emergence_Validation_Specification_v0.1-draft.md` | 知識創発検証（ドラフト） |
 
 言語表層についても、AST対応・式パターン・文・型指定・名前空間解決がそれぞれ独立した仕様書になっています。
@@ -305,6 +371,7 @@ python3 conformance/run_conformance.py
 git clone git@github.com:chigenori053/ReasonScript.git
 cd ReasonScript
 pip install -e .
+cargo build --manifest-path ReasonRuntime/Cargo.toml --bin reason-runtime-host
 ```
 
 ```bash
@@ -318,9 +385,11 @@ pip install -e .
 
 ## 未実装 / 今後
 
-README で明示的に「まだ実装されていない」と宣言されている項目：
+README 自体は v0.5.4.5 時点の記述のまま更新されていませんが、`docs/roadmap.md` の
+直近の状態を見る限り、以下は引き続き未着手です（v0.5.5.8 時点で確認）：
 
-- ReasonGraph / World ビューアの完全版（現状は読み取り専用の土台のみ）
+- ReasonGraph / World ビューアの完全版（現状は読み取り専用の土台のみ。`reason view` が
+  ソース〜ExecutionPlan の対応表示を提供するが、ReasonGraph と World 自体のビューアは未実装）
 - パッケージレジストリの設計
 - LSP シンボルインデックスの、コンパイラソーススパンへの移行
 - SDK 公開APIマニフェスト
@@ -341,7 +410,11 @@ ReasonScript は「LLMを速く動かす」ための言語ではありません�
 知識を直接書けてしまうと、その知識がどこから来たのかが失われる。
 だから **知識は推論の結果として生成され、必ず完全な根拠を伴う**という原則が置かれています。
 
-そのために払っているコストは大きく、仕様書77本、CI テスト1,116件、5言語のDTOバインディングという規模になっています。
+Python の本番実行フォールバックを撤廃し、実行を Rust ランタイムホスト1つに一本化した
+v0.5.5系の変更も、同じ理由に基づきます。**実装が2系統あれば、両者が食い違う余地が生まれる。**
+決定論を言語レベルで保証するなら、本番の実行経路は1つであるべきだ、という判断です。
+
+そのために払っているコストは大きく、仕様書102本、CI テスト1,240件、5言語のDTOバインディングという規模になっています。
 この投資が意味を持つのは、「AIの出力をそのまま信じるわけにはいかない領域」——安全性・監査・規制が
 関わる領域でAIを使う場合です。
 

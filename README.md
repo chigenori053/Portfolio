@@ -16,8 +16,8 @@
 
 | | |
 |---|---|
-| **最初に見るなら** | **[ReasonScript](https://github.com/chigenori053/ReasonScript)** — 推論を記述する状態遷移記述言語。Python 実行系 + Rust ランタイムの Hybrid DSL（Apache-2.0） |
-| **検証済みの成果** | `./reason ci` を実行し**全ステージ PASS / 1,116テスト通過**を確認（2026-08-12, commit `0efb2ab`）<br>COHERENT で**日英60語の想起 100%・言語混在による劣化率 0.00%**（実測共鳴値つきCSVあり）<br>ReasonScript を**実際に使って**別ドメイン（VisionWorldModel）のモデルを `.rsn` で全面記述 |
+| **最初に見るなら** | **[ReasonScript](https://github.com/chigenori053/ReasonScript)** — 推論を記述する状態遷移記述言語。Python コンパイラ + Rust 単一実行ランタイムの Hybrid DSL（Apache-2.0） |
+| **検証済みの成果** | `./reason ci` を実行し**全ステージ PASS / 1,240テスト通過**を確認（2026-08-31, commit `edfd477`）<br>COHERENT で**日英60語の想起 100%・言語混在による劣化率 0.00%**（実測共鳴値つきCSVあり）<br>ReasonScript を**実際に使って**別ドメイン（VisionWorldModel）のモデルを `.rsn` で全面記述 |
 | **正直に言うと** | Design_BrainModel v1 は**未完成プロダクト**（推論爆発を抑え込んではいるが安定の根拠がない）。COHERENT の計算削減効果は**未測定**。詳細は各ページに証拠の強さつきで記載しています |
 | **もっと読むなら** | [設計思想](docs/design-philosophy.md) · [開発年表](docs/timeline.md) · [技術経歴書](docs/technical-profile.md) |
 
@@ -92,7 +92,7 @@
 
 | プロジェクト | 概要 | 主言語 | 規模 | ライセンス |
 |---|---|---|---|---|
-| **[ReasonScript](https://github.com/chigenori053/ReasonScript)** | **推論を記述するための状態遷移記述言語。**決定論的実行とロールバック安全性を言語仕様で保証する [→ 詳細](docs/projects/reasonscript.md) | **Hybrid DSL** — 実行系: Python / ランタイム: Rust | 約133,600行 · **CI 1,116件パス（実行確認済み）** | Apache-2.0 |
+| **[ReasonScript](https://github.com/chigenori053/ReasonScript)** | **推論を記述するための状態遷移記述言語。**決定論的実行とロールバック安全性を言語仕様で保証する [→ 詳細](docs/projects/reasonscript.md) | **Hybrid DSL** — コンパイラ: Python / 実行ランタイム: Rust（単一ネイティブホスト） | 約154,300行 · **CI 1,240件パス（実行確認済み）** | Apache-2.0 |
 
 ### MRA ドメインモデル — Molecular Reasoning Architecture
 
@@ -194,7 +194,7 @@ Phase 0 → 1 → 2 → 3A → 3B-1 → 3B-2 → 3B-3 → 3C-1 と細かく刻�
 
 | | 状態 |
 |---|---|
-| **ReasonScript** | v0.5.4.5 リリース済み。**`./reason ci` を実行し、全ステージ PASS / 1,116件のテスト通過を確認**（2026-08-12、commit `0efb2ab`、Python 3.14.0）。ReasonGraph/World ビューア、パッケージレジストリ、SDK公開APIマニフェストが未実装 |
+| **ReasonScript** | v0.5.5.8 リリース済み。Python本番実行フォールバックを撤廃し、実行をRustランタイムホスト1つに統合。**`./reason ci` を実行し、全ステージ PASS / 1,240件のテスト通過を確認**（2026-08-31、commit `edfd477`、Python 3.14.0）。ReasonGraph/World ビューア、パッケージレジストリ、SDK公開APIマニフェストが未実装 |
 | **MRA** | 開発中。Molecule / Evidence / Provenance のデータモデルと Truth Boundary を仕様として確立した段階 |
 | **VisionWorldModel** | Phase 3C-1 まで検証完了。適応的構造推論に着手 |
 | **LanguageModel** | Phase 0（基盤固定・仕様策定）完了。Holographic Core 実装がこれから |

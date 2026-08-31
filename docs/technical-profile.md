@@ -8,7 +8,7 @@
 |---|---|
 | **GitHub** | https://github.com/chigenori053 |
 | **専門領域** | 言語処理系設計 · 推論システムアーキテクチャ · AI検証基盤 |
-| **主要言語** | Python · Rust（自作言語 ReasonScript は両者による Hybrid 実装） |
+| **主要言語** | Python · Rust（自作言語 ReasonScript は両者による Hybrid 実装。コンパイラを Python、実行ランタイムを Rust が担う） |
 | **活動期間（本書の対象）** | 2025年11月 〜 2026年8月 |
 
 ---
@@ -19,9 +19,10 @@
 決定論的な言語処理系と、記憶と真実を分離した推論アーキテクチャを設計・実装しています。
 
 10ヶ月間で6つのプロジェクトを構築し、その中核として**プログラミング言語 ReasonScript を
-ゼロから開発**（実装約133,600行、CI テスト1,116件、仕様書77本、Apache-2.0）。
+ゼロから開発**（実装約154,300行、CI テスト1,240件、仕様書102本、Apache-2.0）。
 ReasonScript は**推論を状態遷移として記述する言語**であり、
-実行系を Python、ランタイムを Rust が担う **Hybrid DSL** として実装しています。
+Python がコンパイラ/ツールチェーンを、Rust が単一の実行ランタイムを担う **Hybrid DSL** として実装しています
+（2026年8月の Rust ランタイム統合により、Python の本番実行フォールバックは撤廃されました）。
 Rust は2プロジェクト合計で約95,000行、うち Design_BrainModel は60を超える crate による
 ワークスペースとして設計・実装しています。
 
@@ -69,7 +70,7 @@ Molecule として表現する推論アーキテクチャ——を構築中で�
 
 | スキル | 根拠となる実装 |
 |---|---|
-| 処理系・ランタイム実装 | ReasonScript ツールチェーン（543ファイル） |
+| 処理系・ランタイム実装 | ReasonScript ツールチェーン（637ファイル、うち実行ランタイムは Rust に移行済み） |
 | 記号計算 | SymPy 統合（mathlang `symbolic_engine.py`、COHERENT `SymbolicEngine`）、数値サンプリングによる同値判定フォールバック |
 | 数値計算 | 複素テンソル演算、Conv2d/MaxPool2d/AvgPool2d、リバースモード自動微分 |
 | テスト設計 | pytest / unittest、239テストファイル、Golden コーパス |
@@ -104,7 +105,7 @@ Molecule として表現する推論アーキテクチャ——を構築中で�
 
 | スキル | 根拠となる実装 |
 |---|---|
-| CI パイプライン設計 | `./reason ci` — 多段の検証パイプライン。**実行確認済み: 全ステージ PASS / 1,116テスト** |
+| CI パイプライン設計 | `./reason ci` — 多段の検証パイプライン。**実行確認済み: 全ステージ PASS / 1,240テスト** |
 | 適合性検証フレームワーク | `conformance/run_conformance.py`、認証レポート自動更新 |
 | 決定論ゲート | ハッシュ・テンプレート選択・出力テキストの完全一致検証 |
 | Golden コーパステスト | ReasonScript `golden/` |
@@ -122,31 +123,39 @@ Streamlit ダッシュボード · HTML レポート生成
 
 ### 1. ReasonScript — 推論を記述する状態遷移記述言語
 
-**期間：** 2026年4月 〜 現在（v0.5.4.5）
+**期間：** 2026年4月 〜 現在（v0.5.5.8）
 **役割：** 設計・実装のすべて
-**規模：** 実装約133,600行（Python 82,244行 / Rust 45,134行）/ CI テスト1,116件 / 仕様書77本
+**規模：** 実装約154,300行（Python 98,518行 / Rust 55,826行）/ CI テスト1,240件 / 仕様書102本
 
 **推論を状態遷移として記述する言語**を、ゼロから設計・実装。
 決定論的実行とロールバック安全性を**言語仕様として保証**しています。
-実装は **Hybrid DSL** 構成——**実行系を Python、ランタイムを Rust** が担います。
+実装は **Hybrid DSL** 構成——**コンパイラ/ツールチェーンを Python、実行ランタイムを Rust**
+（単一のネイティブ実行ホスト）が担います。2026年8月の Rust ランタイム統合完了により、
+Python は本番実行から退役し、差分テスト用の参照実装専用になりました。
 
 **技術的な達成：**
 
 - **状態遷移意味論を設計** — `goal` / `derive` / `prove` / `apply` / `converge` / `rollback`
   の6プリミティブに `Symbol` / `State` / `Proof` の型を割り当て、状態を書き込む操作を
   `apply` と `rollback` の2つに限定。**証明失敗時の自動ロールバックを言語意味論に組み込んだ**
-- Python 実行系と Rust ランタイムを分離した **Hybrid 構成**を構築。
-  ツールチェーンがネイティブ Rust 実行ファイルを解決・起動する配布形態を実装
+- Python コンパイラ/ツールチェーンと Rust 実行ランタイムを分離した **Hybrid 構成**を構築。
+  当初はツールチェーンがネイティブ Rust 実行ファイルを解決・起動する配布形態だったが、
+  2026年8月の Runtime Rust Consolidation（Phase 0〜9）で**Python の本番実行フォールバックを撤廃**し、
+  実行を単一の Rust ランタイムホスト（`reason-runtime-host`）に一本化
 - 4段階の中間表現（Surface AST → Semantic AST → Reason IR → ExecutionPlan）による
   決定論的コンパイルパイプラインを設計
 - **5言語（Rust / Python / TypeScript / Go / Java）が単一の規範DTO契約を共有**する
   クロス言語バインディングを構築
-- 目的別に7つのランタイムを実装（標準・ハイブリッド・ネイティブ・クラスタ・視覚・可視化・複素数）
-- Tensor Training Foundation v0.2 として、NCHW Conv2d/MaxPool2d/AvgPool2d と
-  **リバースモード自動微分**を実装
+- Rust ランタイムを単一ワークスペース（`ReasonRuntime/`、6クレート）に統合。
+  重複していたランタイム実装（ネイティブ・視覚・複素数の各ディレクトリ）を削除し、
+  Python 側の実行系は差分テスト専用の参照実装に降格
+- Tensor Training Foundation v0.2（NCHW Conv2d/MaxPool2d/AvgPool2d、リバースモード自動微分）に加え、
+  `optimizer.*`（SGD/Momentum/Adam/AdamW）・`relation.*`（関係代数）・Rustネイティブ Autograd を実装
+- 代数的 Enum / Optional / パターンマッチング、制御された再帰（`max_call_depth`）、
+  実行ベースのテストフレームワーク（`reason test`）を言語に統合
 - `reason view` として、ソースコードと4段階の中間表現を**対応付けて表示する**
   ターミナルUIを構築
-- 多段のCIパイプラインと適合性検証フレームワークを整備し、**1,116件のテストを維持**
+- 多段のCIパイプラインと適合性検証フレームワークを整備し、**1,240件のテストを維持**
   （`./reason ci` を実行し全ステージ PASS を確認済み）
 
 → [詳細](projects/reasonscript.md)
@@ -361,8 +370,8 @@ ResearchAgent（仕様案を出すが実装しない）と CodingAgent（実装�
 > AIコーディングエージェントを併用した開発であるため、実装速度は
 > 従来の個人開発と単純比較できない点にご留意ください。
 > 実質的な評価は、下記の再現可能な検証結果を参照してください。
-| 設計・仕様ドキュメント | **約480本**（ReasonScript 300 / DBM 55 / COHERENT 53 / VWM 37 / mathlang 29 / LanguageModel 5）· うち正式な仕様書は ReasonScript 77本 |
-| ReasonScript CI テスト | **1,116件パス（実行確認済み）** |
+| 設計・仕様ドキュメント | **約480本**（ReasonScript 300 / DBM 55 / COHERENT 53 / VWM 37 / mathlang 29 / LanguageModel 5、いずれも旧計測）· ReasonScript は現在 356本（うち正式な仕様書 102本）に増加 |
+| ReasonScript CI テスト | **1,240件パス（実行確認済み）** |
 | Rust crate 数（Design_BrainModel） | 60+ |
 | 対応言語バインディング | 5言語（Rust / Python / TypeScript / Go / Java） |
 | 開発期間 | 約10ヶ月（2025-11 〜 2026-08） |

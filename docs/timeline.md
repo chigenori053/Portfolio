@@ -208,8 +208,9 @@ Phase 6（大規模）· Phase 7（実リポジトリ）· Phase 8（人間評�
 `Proof` が `invalid` を含めば、直前の安全なチェックポイントへ自動ロールバックする——
 推論爆発でフリーズした経験に対する、言語レベルでの回答です。
 
-実装は **Hybrid DSL** 構成を取ります。**実行系を Python、ランタイムを Rust** が担い、
-Python 側のツールチェーンがネイティブ Rust 実行ファイルを呼び出します。
+実装は **Hybrid DSL** 構成を取ります。当初は**実行系を Python、ランタイムを Rust** が担い、
+Python 側のツールチェーンがネイティブ Rust 実行ファイルを呼び出す構成でした
+（この分担は2026年8月に大きく変わります → [現在の構成](projects/reasonscript.md)）。
 
 | DBM v1 の限界 | ReasonScript / MRA での対応 |
 |---|---|
@@ -236,15 +237,20 @@ Python 側のツールチェーンがネイティブ Rust 実行ファイルを�
 | **言語** | 構文、意味論、操作的意味論、型仕様、名前空間解決 |
 | **推論アーティファクト** | ReasoningModel / ReasoningEvaluationReport / ReasoningRuntimeResult |
 | **オブジェクト形式** | ReasonUnit Object（RUO）と移行パス |
-| **ランタイム** | RuntimeReal / HybridRuntime / NativeReasonUnitRuntime / ClusterRuntime / VisionRuntime / VisualizationRuntime / RuntimeComplex |
+| **ランタイム** | `reason-runtime-host`（`ReasonRuntime/` ワークスペース）が本番実行を一手に担う。RuntimeReal / HybridRuntime は差分テスト専用の参照実装として残存。NativeReasonUnitRuntime / VisionRuntime / RuntimeComplex は統合により削除済み |
 | **クロス言語** | Rust / Python / TypeScript / Go / Java の共通DTO契約 |
-| **ツール** | `reason` CLI、`reason view` CodeViewer、IDE、VS Code拡張、LSP、Playground |
-| **品質** | CI パイプライン（実行確認済み: 1,116テスト PASS）、Conformance フレームワーク、Golden コーパス |
+| **ツール** | `reason` CLI（`reason test` は実行ベースに刷新）、`reason view` CodeViewer、IDE、VS Code拡張、LSP、Playground |
+| **品質** | CI パイプライン（実行確認済み: 1,240テスト PASS）、Conformance フレームワーク、Golden コーパス |
 
 ### バージョンの歩み
 
-**v0.5.4.5（2026-08-07）** — 最新リリース。
-Tensor Training Foundation v0.2（NCHW Conv2d / MaxPool2d / AvgPool2d、
+**v0.5.5.8（2026-08-30）** — 最新リリース。
+Runtime Rust Consolidation（Phase 0〜9）が完了し、**Python の本番実行フォールバックを撤廃**、
+実行を単一の Rust ランタイムホストへ統合。同時に Modernization Phases 0〜5
+（代数的Enum/Optional/パターンマッチング、`string.*`標準ライブラリ、実行ベーステスト、
+制御された再帰、ReasonGraph整合性）を実装。
+
+**v0.5.4.5（2026-08-07）** — Tensor Training Foundation v0.2（NCHW Conv2d / MaxPool2d / AvgPool2d、
 リバースモード自動微分）と `.rstensor` ファイルプロファイルを追加。
 同時にオープンソース公開に向けて、内部検証レポートや監査アーティファクトを整理しています。
 
@@ -394,7 +400,7 @@ Design_BrainModel v1 は、この構造の中では**先行実装**として位�
 
 | プロジェクト | 状態 |
 |---|---|
-| ReasonScript | v0.5.4.5 リリース済み（Apache-2.0）。ReasonGraph/World ビューア、パッケージレジストリ、SDK公開APIマニフェストが未実装 |
+| ReasonScript | v0.5.5.8 リリース済み（Apache-2.0）。Python本番実行フォールバックを撤廃しRustランタイムホストへ一本化。ReasonGraph/World ビューア、パッケージレジストリ、SDK公開APIマニフェストが未実装 |
 | MRA | 開発中。Molecule / Evidence / Provenance と Truth Boundary を仕様として確立 |
 | VisionWorldModel | Phase 3C-1 まで検証完了。適応的構造推論に着手 |
 | LanguageModel | Phase 0 完了。Holographic Core 実装がこれから |

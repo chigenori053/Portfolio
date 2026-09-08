@@ -1,219 +1,169 @@
-# Portfolio — 検証可能な推論システムの研究開発
+# Portfolio — Software / Backend Engineer
 
 *[English version →](README.en.md)*
 
-**「AIの出力を信じる」から「AIの推論を検証する」へ。**
-
-**AIの推論を検証可能にするための言語処理系と推論アーキテクチャを、個人で設計・実装しています。**
-以下6リポジトリはすべて個人プロジェクトであり、設計・実装・検証を単独で担当しています
-（AIコーディングエージェントを併用）。
+**Python / Rust を中心に、Backend、Runtime、Persistence、Developer Toolingの設計・実装を行っています。**
+個人開発では ReasonScript という DSL / Runtime を設計・実装し、言語処理・永続化・Transaction・Cluster実行・CLI・Testingを構築しています。実務ドメインに接続した小規模なフルスタック開発（後述の KuKKA）もあります。現在は Software Engineer / Backend Engineer としてのキャリア形成を目指しています。
 
 - **GitHub** — [@chigenori053](https://github.com/chigenori053)
-- **専門** — 言語処理系設計 · 推論システムアーキテクチャ · AI検証基盤
-- **主言語** — Python · Rust
+- **主言語** — Python · Rust · TypeScript
+- **対象職種** — 下記「[Target Roles](#target-roles)」を参照
 
-## 2分で見る場合
+<sub>本ポートフォリオでは、**主張ごとに証拠の強さ（VALIDATED / TESTED / IMPLEMENTED / PROTOTYPE / EXPERIMENTAL / DESIGN / RESEARCH / CONCEPT）を明示**しています。裏付けの弱い主張を強い成果として提示しないことを方針としています。全体は [Evidence Index](evidence/evidence-index.md) にまとめています。</sub>
+
+---
+
+## Target Roles
 
 | | |
 |---|---|
-| **最初に見るなら** | **[ReasonScript](https://github.com/chigenori053/ReasonScript)** — 推論を記述する状態遷移記述言語。Python コンパイラ + Rust 単一実行ランタイムの Hybrid DSL（Apache-2.0） |
-| **検証済みの成果** | `./reason ci` を実行し**全ステージ PASS / 1,240テスト通過**を確認（2026-08-31, commit `edfd477`）<br>COHERENT で**日英60語の想起 100%・言語混在による劣化率 0.00%**（実測共鳴値つきCSVあり）<br>ReasonScript を**実際に使って**別ドメイン（VisionWorldModel）のモデルを `.rsn` で全面記述 |
-| **正直に言うと** | Design_BrainModel v1 は**未完成プロダクト**（推論爆発を抑え込んではいるが安定の根拠がない）。COHERENT の計算削減効果は**未測定**。詳細は各ページに証拠の強さつきで記載しています |
-| **もっと読むなら** | [設計思想](docs/design-philosophy.md) · [開発年表](docs/timeline.md) · [技術経歴書](docs/technical-profile.md) |
-
-<sub>本ポートフォリオでは、**主張ごとに証拠の強さ（実測 / 実行結果 / 設計確認のみ / 未測定 / 再現不可）を明示**しています。裏付けの弱い数字を強い成果として提示しないことを方針としています。</sub>
+| **Primary** | Software Engineer · Backend Engineer |
+| **Secondary** | Platform Engineer · Developer Tools Engineer · AI Backend Engineer |
+| **Long-term** | R&D Engineer / Research Software Engineer |
 
 ---
 
-このポートフォリオは、大規模言語モデルが抱える非決定性・検証不可能性・設計意図の喪失という課題に対して、
-**決定論的な言語処理系と、記憶と真実を分離した推論アーキテクチャ**で応えようとする一連の研究開発をまとめたものです。
+## Core Engineering Skills
 
-中心には自作のプログラミング言語 **ReasonScript** があり、その上に応用研究プロジェクトが積み上がっています。
+| Area | Skills | Evidence |
+|---|---|---|
+| **Language** | Python, Rust, TypeScript | [ReasonScript](case-studies/reasonscript.md) |
+| **Compiler / Runtime** | 字句・構文解析、AST設計、中間表現(IR)設計、決定論的実行計画生成 | [ReasonScript Case Study](case-studies/reasonscript.md) |
+| **Persistence / Data Modeling** | 構造レベルのトランザクション・世代管理、リレーショナルDB設計（Prisma/PostgreSQL） | [Persistent Graph Runtime](case-studies/persistent-graph-runtime.md) · [Backend Project: KuKKA](projects/backend-service.md) |
+| **API Design** | REST API、クロス言語DTO契約（5言語） | [Backend Engineering Evidence](backend-engineering/overview.md#1-api--interface-design) |
+| **Distributed Execution** | worker調整・retry・timeout付きクラスタ実行（Rustクレート、単体テストで確認済み） | [Cluster Runtime Case Study](case-studies/cluster-runtime.md)（TESTED） |
+| **Testing / CI** | Unit/Integration/Golden/差分テスト、9ステージCIパイプライン | [ReasonScript Case Study](case-studies/reasonscript.md) — 1,240テストPASS実行確認済み |
+| **Debugging / Failure Analysis** | 根本原因分析、構造的診断、限界の正直な開示 | [Debugging & Failure Analysis](case-studies/debugging-and-failure-analysis.md) |
+| **Tooling** | CLI、LSP、VS Code拡張、ブラウザPlayground | [ReasonScript Case Study](case-studies/reasonscript.md) |
 
 ---
 
-## 系譜 / Project Lineage
+## Featured Project — ReasonScript
 
-探索期に得た知見が基盤（ReasonScript）に結実し、その上で
-**MRA — Molecular Reasoning Architecture** という推論アーキテクチャの構築に向かっています。
+**推論を状態遷移として記述する言語**を、Python製コンパイラ/ツールチェーンと単一のRustランタイムホストによる Hybrid DSL として設計・実装しています。
+
+- 実装約154,300行（Python 98,518行 / Rust 55,826行）、仕様書102本
+- `./reason ci` を実行し、**全9ステージ PASS・1,240件のテスト通過を確認済み**（2026-08-31, commit `edfd477`）
+- 5言語（Rust/Python/TypeScript/Go/Java）が単一のDTO契約を共有
+- 状態を書き込む操作を `apply`/`rollback` の2つに限定し、証明失敗時の自動ロールバックを言語意味論に組み込み
+- Apache-2.0
+
+→ [Case Study（SE視点の要約）](case-studies/reasonscript.md) · [詳細（研究的背景を含む全体像）](docs/projects/reasonscript.md)
+
+---
+
+## Backend Engineering Evidence
+
+「バックエンドエンジニアとして採用できる根拠」を12項目で整理しています。証拠が薄い項目（Security・Observability）は誇張せずGapとして明記しています。
+
+| 領域 | 状態 |
+|---|---|
+| API/Interface Design, Data Modeling | IMPLEMENTED |
+| Persistence, Transaction Management | VALIDATED（構造レベル）/ PROTOTYPE（RDB） |
+| Concurrency | TESTED（部分的） |
+| Distributed Execution | TESTED（単一マシン上の複数プロセス協調。ネットワーク分散は未確認） |
+| Fault Tolerance, Error Handling | IMPLEMENTED〜VALIDATED |
+| Security, Observability | **Gapとして明記**（本番運用レベルの実装例なし） |
+| Testing, CI/CD | VALIDATED |
+
+→ [Backend Engineering Evidence 全項目](backend-engineering/overview.md)
+
+---
+
+## Selected Case Studies
+
+すべて Problem → Requirements → Constraints → Architecture → Design Decisions → Implementation → Testing → Problems Found → Root Cause → Fix → Verification → Result → Known Limitations という統一フォーマットで記述しています。
+
+| Case Study | 見せる能力 | Status |
+|---|---|---|
+| **[ReasonScript](case-studies/reasonscript.md)** | 決定論的コンパイラ・ランタイム設計、CI/テスト基盤 | VALIDATED |
+| **[Persistent Graph Runtime](case-studies/persistent-graph-runtime.md)** | 構造レベルの永続化・トランザクションモデル（VisionWorldModel） | VALIDATED |
+| **[Cluster Runtime](case-studies/cluster-runtime.md)** | Worker調整・Retry・Timeoutを備えた分散実行（ソース調査・テストで確認済み） | TESTED |
+| **[Debugging & Failure Analysis](case-studies/debugging-and-failure-analysis.md)** | 障害の根本原因分析と、限界を正直に開示する判断 | 3件の実例 |
+
+## Backend Project
+
+| プロジェクト | 概要 | Status |
+|---|---|---|
+| **[KuKKA — プログラミング教室 予約・運営システム](projects/backend-service.md)** | 実在する教室のNext.js+Prisma+PostgreSQLによる予約・管理システム。認証・テスト未実装のまま開発停止中 | **PROTOTYPE**（一時停止中） |
+
+---
+
+## Software Engineering Process
 
 ```
-  ■ 探索期 ────────────────────────────────────────────────────────
-
-   2025-11   mathlang              数学学習支援言語（Python ベースの DSL）
-                 │                 数式の正誤判定 ──「過程を第一級のデータにする」
-                 ▼
-   2025-11   COHERENT              理論検証プロジェクト（推論モデル名: BrainModel）
-                 │                 「Transformer 以外で LLM 同等の推論は可能か」
-                 │                 HolographicMemory + MemorySpace ── MRA 記憶モデルの前身
-                 ▼
-   2026-01   Design_BrainModel v1  コードを想起するコーディングエージェント
-                 │                 Rust / 60+ crates ── 未完成プロダクト
-                 │
-                 │  推論爆発・記憶機構の限界に突き当たり、
-                 │  その解決のため基盤から作り直す判断へ
-                 ▼
-  ■ 基盤 ──────────────────────────────────────────────────────────
-
-   2026-04   ★ ReasonScript        推論を記述する状態遷移記述言語（Apache-2.0）
-                 │                 Hybrid DSL: Python 実行系 + Rust ランタイム
-                 │                 Surface AST → … → ExecutionPlan
-                 │
-  ■ MRA ───────┴──────────────────────────────────────────────────
-
-            ★ MRA — Molecular Reasoning Architecture   ← 現在開発中
-              知識を型付き Atom / Bond からなる Molecule として表現する推論モデル
-                 │
-     ┌───────────┼────────────────────────┐
-     ▼           ▼                        ▼
- VisionWorldModel   LanguageModel      Design_BrainModel v2
-  視覚ドメイン       言語ドメイン         ソフトウェア設計ドメイン
-  2026-07           2026-08              （再設計予定）
-
-  観測と推論の分離   Truth Boundary        設計案 → システム構造
-  ACCEPT/REVISE/    連想記憶と正規知識     → コードの想起
-  DEFER/ABSTAIN     の分離
+Requirement → Specification → Architecture → Implementation
+   → Automated Test → Failure Analysis → Specification Revision → Regression Test
 ```
 
-### この構造が意味すること
+仕様書を実装より先に書き、Phase単位で刻んで検証する進め方を採用しています（詳細: [設計思想](docs/design-philosophy.md)）。
 
-**一つの基盤の上に、視覚・言語・ソフトウェア設計という異なる3ドメインの応用が乗ります。**
-応用が1つしかない基盤は「その応用のために作ったもの」にしか見えませんが、
-3ドメインに展開されるなら、基盤設計が実際に汎用だったことの検証になります。
+### AIエージェントとの協働
 
-各ドメインモデルは基盤を改変せず、ReasonScript の公開CLIと決定論的契約のみを利用します。
-`LanguageModel` は基盤をコミットハッシュ単位（`7f29c1c`）で固定しています。
+Coding Agentを活用した開発ですが、役割は明確に分離しています。
+
+| 担当 | 役割 |
+|---|---|
+| **Human** | Requirements、Architecture、Specification、Review、Failure classification、Acceptance decision |
+| **Coding Agents** | Implementation support、Refactoring、Test implementation、Static analysis support |
 
 ---
 
-## プロジェクト一覧 / Projects
+## Advanced R&D
 
-### 基盤 — Foundation
+Software/Backend Engineeringの基盤の上に、MRA（Molecular Reasoning Architecture）という推論アーキテクチャの研究開発があります。COHERENT・VisionWorldModel・LanguageModel・Design_BrainModelがその構成要素です。
 
-| プロジェクト | 概要 | 主言語 | 規模 | ライセンス |
-|---|---|---|---|---|
-| **[ReasonScript](https://github.com/chigenori053/ReasonScript)** | **推論を記述するための状態遷移記述言語。**決定論的実行とロールバック安全性を言語仕様で保証する [→ 詳細](docs/projects/reasonscript.md) | **Hybrid DSL** — コンパイラ: Python / 実行ランタイム: Rust（単一ネイティブホスト） | 約154,300行 · **CI 1,240件パス（実行確認済み）** | Apache-2.0 |
-
-### MRA ドメインモデル — Molecular Reasoning Architecture
-
-開発中の推論アーキテクチャ MRA を構成する、ドメイン別のモデル群です。
-
-| プロジェクト | ドメイン | 概要 | 規模 | 状態 |
-|---|---|---|---|---|
-| **[VisionWorldModel](https://github.com/chigenori053/VisonWorldModel)** | 視覚 | 観測と推論を分離し、判断を保留できる世界モデル [→ 詳細](docs/projects/visionworldmodel.md) | 約7,700行 | Phase 3C-1 |
-| **[LanguageModel](https://github.com/chigenori053/LanguageModel)** | 言語 | 連想記憶と正規知識を分離した言語モデル基盤 [→ 詳細](docs/projects/languagemodel.md) | 仕様書中心 | Phase 0 |
-| **[Design_BrainModel](https://github.com/chigenori053/Design_BrainModel)** | ソフトウェア設計 | 設計案からシステム構造を生成し、そこからコードを**想起する**コーディングエージェント [→ 詳細](docs/projects/design-brainmodel.md) | 約57,000行 · 60+ crate | **v1 未完成 / v2 再設計予定** |
-
-### 探索期 — Exploration
-
-MRA と ReasonScript に至る過程で構築した、先行プロジェクトです。
-
-| プロジェクト | 概要 | 主言語 | 規模 | 状態 |
-|---|---|---|---|---|
-| **[COHERENT](https://github.com/chigenori053/COHERENT)** | **理論検証プロジェクト**（推論モデル名 **BrainModel**）。Transformer に依らない推論の成立可能性を、光学干渉のシミュレーションと記憶再利用によって検証 [→ 詳細](docs/projects/coherent.md) | Python | 約43,000行 | 検証継続中 |
-| **[mathlang](https://github.com/chigenori053/mathlang)** | **数学学習支援言語**（Python ベースの DSL）。人間が書く数式を Parser で正規化し、SymPy をランタイムに組み込んで**数式の正誤判定**を行う [→ 詳細](docs/projects/mathlang.md) | Python | 約9,200行 | 開発停止（Apache-2.0） |
+→ [Advanced R&D 全体像](advanced-rd/overview.md)
 
 ---
 
-## 一貫する設計思想 / Design Principles
-
-全プロジェクトを貫く5つの原則があります。詳細は **[設計思想](docs/design-philosophy.md)** を参照してください。
-
-### 1. 決定論と再現性を仕様で保証する
-
-「同じ入力からは同じ実行計画が生成される」を、努力目標ではなく**言語仕様と検証ゲート**として実装しています。
-Design_BrainModel ではハッシュアルゴリズム（FNV-1a 64bit）、シード値、浮動小数点の文字列化精度（`{:.6}`）、
-テンプレート選択の曖昧性閾値（`1e-6`）まで仕様で凍結しています。
-
-### 2. 「記憶」と「真実」を分離する — Truth Boundary
-
-連想記憶（ホログラフィック記憶）は**意味活性化の場**であって、真実の保存先ではありません。
-
-> ベクトル類似度・復号結果・ニューラルモデルの確信度だけを根拠として、関係を断定してはならない。
-> — *MRA Holographic Semantic Language Model 仕様書 v0.1, §2.1 Truth Boundary*
-
-「意味的に近い」と「その関係が成立する」は厳密に区別され、事実応答は必ず正規データと Evidence 検証を通過します。
-この原則は COHERENT / BrainModel の想起→検証、VisionWorldModel の観測→推論の分離にも共通しています。
-COHERENT では `Accept` / `Review` / `Reject` の三値判定として実装され、判定には必ず根拠ログが伴います。
-
-### 3. 判断しないことを、正当な出力にする
-
-VisionWorldModel は `ACCEPT` / `REVISE` / `DEFER` / `ABSTAIN` の4値で判断を返します。
-根拠が不十分なら**保留・棄権する**ことを設計上の正常系として扱う。これは無理に答えを出すLLMへの対案です。
-
-### 4. 仕様書を先に書き、Phase で刻む
-
-MUST / MUST NOT / SHOULD / MAY の規範語による仕様書を実装より先に置き、
-Phase 0 → 1 → 2 → 3A → 3B-1 → 3B-2 → 3B-3 → 3C-1 と細かく刻んで進めます。
-各Phaseは検証コマンドと機械可読な成果物（JSON）を必ず伴います。
-
-### 5. AIエージェントとの協働そのものを設計対象にする
-
-`AGENT.md` / `Rule.md` / `AGENTS.md` により、権限階層と役割分担を明文化しています。
-
-```
-権限順位:  specs/  >  Rule.md  >  TASK_STATE.yaml  >  実装コード
-役割分担:  Architect(人間) / ResearchAgent / CodingAgent / ValidationAgent
-```
-
-> *"DBM doesn't compete with Claude Code — it provides the structure and safety that Claude Code tends to lack."*
-> — Design_BrainModel README
-
----
-
-## 技術スタック / Tech Stack
+## Tech Stack
 
 | 領域 | 技術 |
 |---|---|
-| **言語処理系** | 字句・構文解析、AST設計、中間表現(IR)、実行計画生成、型仕様、名前空間解決、**状態遷移意味論の設計** |
-| **Rust** | 言語ランタイム実装、60+ crate のワークスペース設計、Safe-Rust、Cargo、LSP サーバ |
-| **Python** | 言語実行系・ツールチェーン実装、SymPy による記号計算、pytest、uv |
+| **言語処理系** | 字句・構文解析、AST設計、中間表現(IR)、実行計画生成、型仕様、名前空間解決 |
+| **Rust** | ランタイム実装、Cargo によるマルチクレート管理、Safe-Rust、LSPサーバ |
+| **Python** | 処理系・ツールチェーン実装、pytest、uv |
+| **Web/Backend** | Next.js（App Router）、Prisma、PostgreSQL、REST API設計 |
 | **クロス言語** | Rust / Python / TypeScript / Go / Java の共通DTO契約 |
-| **数値計算** | 複素テンソル、Conv2d/MaxPool2d/AvgPool2d、リバースモード自動微分 |
-| **AI・推論** | HRR / VSA（分散表現）、記号推論、因果推論、ファジィ判定、マルチモーダル統合 |
-| **ツールチェーン** | CLI、REPL、IDE、VS Code拡張、LSP、ブラウザPlayground、CI パイプライン |
-| **品質保証** | Conformance フレームワーク、Golden コーパス、決定論ゲート、スキーマ検証 |
+| **品質保証** | CI パイプライン、Conformance framework、Golden コーパス、決定論ゲート |
 
 ---
 
-## ドキュメント / Documentation
+## Status
 
-- **[設計思想](docs/design-philosophy.md)** — 5つの原則の詳細と、それが各プロジェクトでどう実装されているか
-- **[開発年表](docs/timeline.md)** — 2025-11 から現在までの流れと、各段階での問題意識の変化
-- **[技術経歴書](docs/technical-profile.md)** — スキルセットと成果を職務経歴書形式で整理
-- **プロジェクト詳細** — [ReasonScript](docs/projects/reasonscript.md) ·
-  [Design_BrainModel](docs/projects/design-brainmodel.md) ·
-  [COHERENT](docs/projects/coherent.md) ·
-  [mathlang](docs/projects/mathlang.md) ·
-  [VisionWorldModel](docs/projects/visionworldmodel.md) ·
-  [LanguageModel](docs/projects/languagemodel.md)
-
----
-
-## 現在地と今後 / Status
-
-| | 状態 |
+| プロジェクト | 状態 |
 |---|---|
-| **ReasonScript** | v0.5.5.8 リリース済み。Python本番実行フォールバックを撤廃し、実行をRustランタイムホスト1つに統合。**`./reason ci` を実行し、全ステージ PASS / 1,240件のテスト通過を確認**（2026-08-31、commit `edfd477`、Python 3.14.0）。ReasonGraph/World ビューア、パッケージレジストリ、SDK公開APIマニフェストが未実装 |
-| **MRA** | 開発中。Molecule / Evidence / Provenance のデータモデルと Truth Boundary を仕様として確立した段階 |
-| **VisionWorldModel** | Phase 3C-1 まで検証完了。適応的構造推論に着手 |
-| **LanguageModel** | Phase 0（基盤固定・仕様策定）完了。Holographic Core 実装がこれから |
-| **Design_BrainModel** | **v1 は未完成プロダクト** — ①推論爆発によるシステムフリーズ（現状は強引な抑制のみで、安定稼働の根拠がない）②記憶機構が期待した学習能力を発揮しなかった ③HolographicMemory の容量が実用に耐えない。この3つが **ReasonScript 開発の直接の動機**。**ReasonScript + MRA Base による v2 再設計を予定** |
-| **COHERENT** | **単語・多言語の想起 100%（60語・実測データあり）**が最も確度の高い成果。数式の正誤判定も成立。文字生成はカタカナ100%・漢字60〜80%（生成スクリプト未収録のため再現不可）。「記憶があれば計算しない」機構は**5件の固定シナリオによる設計確認のみ**で、性能としては未測定 |
-| **mathlang** | 2025-11 で更新停止。学習支援のために解いた課題（過程の記述・再生・同値判定）が後続すべての土台になった |
+| **ReasonScript** | v0.5.5.8リリース済み（Apache-2.0）。`./reason ci` 全ステージPASS・1,240テスト確認済み（2026-08-31） |
+| **KuKKA (backend-service)** | Next.js+Prisma+PostgreSQLによる予約・管理システム。2026-03-14を最後に開発停止中。認証・テスト未実装 |
+| **VisionWorldModel** | Phase 3C-1まで検証完了 |
+| **MRA / LanguageModel** | Phase 0完了（基盤固定・仕様策定）。実装はこれから |
+| **Design_BrainModel** | v1は未完成プロダクト（推論爆発の抑制に安定の根拠なし）。ReasonScript + MRA Baseによるv2再設計を予定 |
+| **COHERENT** | 検証継続中。単語・多言語の想起100%（実測）が最も確度の高い成果。記憶再利用による計算削減は未測定 |
+| **mathlang** | 2025-11で更新停止（Apache-2.0） |
 
 ---
 
-## ライセンス方針 / Licensing
+## Licensing
 
-**基盤ツールは開き、研究アーキテクチャ本体は留保する**という方針です。
+**基盤ツールは開き、研究アーキテクチャ本体・実務プロジェクトは留保する**方針です。
 
 | 対象 | 方針 |
 |---|---|
-| **ReasonScript** | **Apache-2.0**。MRA の実装手段であり、研究対象ではないため公開 |
-| **mathlang** | **Apache-2.0**。MRA とは独立した初期実験のため公開 |
-| **MRA ドメインモデル**（VisionWorldModel / LanguageModel / Design_BrainModel） | **全権利留保。** 開発中のアーキテクチャを構成するため、現時点ではライセンスを付与していません |
-| **COHERENT** | **全権利留保。** 研究・検証プロジェクトのため |
+| **ReasonScript / mathlang** | Apache-2.0 |
+| **MRAドメインモデル**（VisionWorldModel / LanguageModel / Design_BrainModel）· **COHERENT** | 全権利留保（開発中/研究プロジェクトのため） |
+| **KuKKA (backend-service)** | 実務プロジェクトのため非公開ライセンス方針。コードは閲覧・評価目的で公開 |
 
-留保しているリポジトリのコードも、**閲覧と評価のために公開しています。**
-利用をご希望の場合は、各リポジトリの Issue でご相談ください。
+留保しているリポジトリのコードも、閲覧と評価のために公開しています。利用をご希望の場合は、各リポジトリのIssueでご相談ください。
+
+---
+
+## Documentation
+
+- **[Backend Engineering Evidence](backend-engineering/overview.md)** — バックエンドエンジニアとしての根拠12項目
+- **[Case Studies](case-studies/)** — ReasonScript・Persistent Graph Runtime・Cluster Runtime・Debugging & Failure Analysis
+- **[Backend Project](projects/backend-service.md)** — KuKKA（実務プロジェクト）
+- **[Evidence Index](evidence/evidence-index.md)** — 全主張のClaim/Evidence/Statusテーブル
+- **[Advanced R&D](advanced-rd/overview.md)** — MRA系譜の全体像
+- **[設計思想](docs/design-philosophy.md)** · **[開発年表](docs/timeline.md)** · **[技術経歴書](docs/technical-profile.md)**
+- **プロジェクト詳細（研究的背景を含む全体像）** — [ReasonScript](docs/projects/reasonscript.md) · [VisionWorldModel](docs/projects/visionworldmodel.md) · [COHERENT](docs/projects/coherent.md) · [LanguageModel](docs/projects/languagemodel.md) · [Design_BrainModel](docs/projects/design-brainmodel.md) · [mathlang](docs/projects/mathlang.md)
